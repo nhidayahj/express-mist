@@ -12,5 +12,14 @@ const getAllCategory = async() => {
     return allCategory;
 }
 
+const getDiffuserById = async(diffuserId) => {
+    const diffuser = await Diffuser.where({
+        'id':diffuserId
+    }).fetch({
+        require:true,
+        withRelated:['category']
+    })
+    return diffuser;
+}
 
-module.exports = {getAllDiffuser, getAllCategory }
+module.exports = {getAllDiffuser, getAllCategory,getDiffuserById}

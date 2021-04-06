@@ -1,0 +1,19 @@
+{{#extends 'base'}}
+{{#block 'title'}}Aroma Mist - Update Stock{{/block}}
+
+{{#block 'content'}}
+<h2>Update Stock Item: {{diffuser.diffuser_name}}</h2>
+
+<form method="POST">
+    {{{form}}}
+
+
+    <input type="submit" value="Update Item" class="btn btn-success btn-sm"/>
+</form>
+
+
+
+{{/block}}
+
+
+{{/extends}}
