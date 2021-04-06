@@ -1,4 +1,4 @@
-const bookshelf = require('./bookshelf');
+const bookshelf = require('../bookshelf');
 
 // create an instance of the model 
 // model instance == one row in the table 

@@ -17,9 +17,8 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db) {
   return db.createTable('diffusers', {
       id:{type:'int', primaryKey:true, autoIncrement:true},
-      diffuser_title:{type:'string', length:100, notNull:true},
+      diffuser_name:{type:'string', length:100, notNull:true},
       description:'text',
-      image_url:{type:'string', length:255},
       stock:'int',
       cost:'int'
 
