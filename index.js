@@ -25,7 +25,7 @@ const diffuserRoute = require('./routes/diffuser')
 async function main() {
 
     app.use('/', landingRoute)
-    app.use('/diffuser', diffuserRoute)
+    app.use('/diffusers', diffuserRoute)
 }
 
 main();

@@ -8,7 +8,7 @@
     <h2>Display all products</h2>
 
     <div>
-        <a href="/diffuser/create" class="btn btn-info btn-sm mt-4 mb-4">Upload</a>
+        <a href="/diffusers/create" class="btn btn-info btn-sm mt-4 mb-4">Add Stock</a>
 
     </div>
 
@@ -30,7 +30,7 @@
                 <td>{{this.id}}</td>
                 <td>Image</td>
                 <td>{{this.diffuser_name}}</td>
-                <td>Category</td>
+                <td>{{this.category_id.name}}</td>
                 <td>{{this.cost}}</td>
                 <td>{{this.stock}}</td>
             </tr>

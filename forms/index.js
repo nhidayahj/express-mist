@@ -31,7 +31,7 @@ const createProductForm = (categories) => {
             required:true,
             errorAfterField:true, 
             cssClasses: {
-                label:['form-label', 'text-primary']
+                label:['form-label', 'text-primary'],
             }
         }), 
         'description':fields.string({
@@ -39,9 +39,11 @@ const createProductForm = (categories) => {
             errorAfterField:true, 
             cssClasses: {
                 label:['form-label', 'text-primary']
-            }
+            },
+            widget:widgets.textarea()
         }),
         'stock':fields.string({
+            label:'Stock count',
             required:true,
             errorAfterField:true, 
             cssClasses: {
