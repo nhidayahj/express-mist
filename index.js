@@ -20,12 +20,12 @@ app.use(
 
 // import in routes 
 const landingRoute = require('./routes/landing')
-const productsRoute = require('./routes/products')
+const diffuserRoute = require('./routes/diffuser')
 
 async function main() {
 
     app.use('/', landingRoute)
-    app.use('/products', productsRoute)
+    app.use('/diffuser', diffuserRoute)
 }
 
 main();
