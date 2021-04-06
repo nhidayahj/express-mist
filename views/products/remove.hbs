@@ -1,0 +1,21 @@
+{{#extends 'base'}}
+{{#block 'title'}}Delete Stock Item{{/block}}
+
+{{#block 'content'}}
+
+<div>
+    <h2>Delete stock item: {{diffuser.diffuser_name}}</h2>
+    <form method="POST">
+        
+        <div class="alert alert-danger">
+            <p>Are you sure you want to delete {{diffuser.diffuser_name}}?</p>
+        </div> 
+        <input type="submit" class="btn btn-danger btn-sm" value="Yes"/>
+        <a href="/diffusers" class="btn btn-success btn-sm">No</a>
+    </form>
+</div>
+
+{{/block}}
+
+
+{{/extends}}

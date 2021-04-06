@@ -34,7 +34,9 @@
                 <td>{{this.category_id.name}}</td>
                 <td>{{this.cost}}</td>
                 <td>{{this.stock}}</td>
-                <td><a href="/diffusers/{{this.id}}/update" class="btn btn-primary btn-sm ml-2">Update</a></td>
+                <td><a href="/diffusers/{{this.id}}/update" class="btn btn-primary btn-sm ml-2">Update</a>
+                <a href="/diffusers/{{this.id}}/remove" class="btn btn-danger btn-sm ml-2">Remove</a>
+                </td>
             </tr>
             {{/each}}
         </tbody>

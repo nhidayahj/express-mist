@@ -3,58 +3,58 @@
 const express = require('express');
 const router = express.Router();
 
-const {Diffuser, Diffuser_Category} = require('../models')
+const { Diffuser, Diffuser_Category } = require('../models')
 
 const diffuserDataLayer = require('../dal/diffuser')
 
-const {bootstrapField, createProductForm} = require('../forms')
+const { bootstrapField, createProductForm } = require('../forms')
 
-router.get('/', async (req,res) => {
+router.get('/', async (req, res) => {
     const allCategories = await diffuserDataLayer.getAllCategory()
     // console.log(allCategories);
     const allDiffuser = await diffuserDataLayer.getAllDiffuser()
-    
+
 
     res.render('products/diffuser', {
-        'diffuser':allDiffuser.toJSON(),
-        
-        
+        'diffuser': allDiffuser.toJSON(),
+
+
     })
 })
 
 
-router.get('/create', async(req,res) => {
+router.get('/create', async (req, res) => {
     const allCategories = await diffuserDataLayer.getAllCategory();
 
     const createProduct = createProductForm(allCategories);
 
     res.render('products/create', {
-        'form':createProduct.toHTML(bootstrapField)
+        'form': createProduct.toHTML(bootstrapField)
     })
 })
 
 // route to upload new stock
-router.post('/create', async(req,res) => {
+router.post('/create', async (req, res) => {
     const allCategories = await diffuserDataLayer.getAllCategory();
     const createProduct = createProductForm(allCategories);
 
     createProduct.handle(req, {
         'success': async (form) => {
             const newItem = new Diffuser();
-            newItem.set(form.data) 
+            newItem.set(form.data)
             await newItem.save()
-            
+
             res.redirect('/diffusers');
-        }, 
+        },
         'error': (form) => {
             res.render('diffusers/create', {
-                'form':form.toHTML(bootstrapField)
+                'form': form.toHTML(bootstrapField)
             })
         }
     })
 })
 
-router.get('/:diffuser_id/update', async(req,res) => {
+router.get('/:diffuser_id/update', async (req, res) => {
     const getAllCategory = await diffuserDataLayer.getAllCategory();
 
     const diffuserToEdit = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
@@ -68,20 +68,20 @@ router.get('/:diffuser_id/update', async(req,res) => {
     productForm.fields.stock.value = diffuserToEdit.get('stock')
 
     res.render('products/update', {
-        'form':productForm.toHTML(bootstrapField),
-        'diffuser':diffuserJSON
+        'form': productForm.toHTML(bootstrapField),
+        'diffuser': diffuserJSON
     })
 
 
 })
 
-router.post('/:diffuser_id/update', async(req,res) => {
+router.post('/:diffuser_id/update', async (req, res) => {
     const getAllCategory = diffuserDataLayer.getAllCategory();
     const diffuserToEdit = diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
 
     const productForm = createProductForm(getAllCategory);
-    productForm.handle(req,{
-        'success':async(form) => {
+    productForm.handle(req, {
+        'success': async (form) => {
             diffuserToEdit.set(form.data);
             await diffuserToEdit.save();
 
@@ -89,12 +89,25 @@ router.post('/:diffuser_id/update', async(req,res) => {
         },
         'error': (form) => {
             res.render('products/update', {
-                'form':form.toHTML(bootstrapField),
-                'diffuser':diffuserToEdit.toJSON()
+                'form': form.toHTML(bootstrapField),
+                'diffuser': diffuserToEdit.toJSON()
             })
         }
     })
 
+})
+
+router.get('/:diffuser_id/remove', async (req, res) => {
+    const diffuserToRemove = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
+    res.render('products/remove', {
+        'diffuser': diffuserToRemove.toJSON()
+    })
+})
+
+router.post('/:diffuser_id/remove', async (req, res) => {
+    const diffuserToRemove = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
+    await diffuserToRemove.destroy();
+    res.redirect('/diffusers')
 })
 
 module.exports = router;
