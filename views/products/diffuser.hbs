@@ -19,7 +19,8 @@
                 <th scope="col">Product Image</th>
                 <th scope="col">Product Name</th>
                 <th scope="col">Category</th>
-                <th scope="col">Price</th>
+                <th scope="col">Tags</th>
+                <th scope="col">Price (in cents)</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Stock Actions</th>
             </tr>
@@ -31,7 +32,8 @@
                 <td>{{this.id}}</td>
                 <td>Image</td>
                 <td>{{this.diffuser_name}}</td>
-                <td>{{this.category_id.name}}</td>
+                <td>{{this.category.name}}</td>
+                <td>Tags</td>
                 <td>{{this.cost}}</td>
                 <td>{{this.stock}}</td>
                 <td><a href="/diffusers/{{this.id}}/update" class="btn btn-primary btn-sm ml-2">Update</a>

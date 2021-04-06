@@ -5,8 +5,8 @@ const bookshelf = require('../bookshelf');
 
 const Diffuser = bookshelf.model('Diffuser', {
     tableName:'diffusers',
-    category(){
-        return this.belongsTo('Diffuser_Category')
+    category() {
+        return this.belongsTo('Diffuser_Category', 'category_id')
     }
 })
 

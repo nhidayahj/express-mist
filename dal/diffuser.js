@@ -2,7 +2,10 @@ const {Diffuser, Diffuser_Category} = require('../models')
 
 
 const getAllDiffuser = async() => {
-    return await Diffuser.fetchAll()
+    // return await Diffuser.fetchAll()
+    return await Diffuser.collection().fetch({
+        withRelated:['category']
+    })
 }
 const getAllCategory = async() => {
     const allCategory = await Diffuser_Category

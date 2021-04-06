@@ -11,14 +11,11 @@ const { bootstrapField, createProductForm } = require('../forms')
 
 router.get('/', async (req, res) => {
     const allCategories = await diffuserDataLayer.getAllCategory()
-    // console.log(allCategories);
+    
     const allDiffuser = await diffuserDataLayer.getAllDiffuser()
-
 
     res.render('products/diffuser', {
         'diffuser': allDiffuser.toJSON(),
-
-
     })
 })
 
