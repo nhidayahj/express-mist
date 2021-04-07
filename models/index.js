@@ -7,7 +7,11 @@ const Diffuser = bookshelf.model('Diffuser', {
     tableName:'diffusers',
     category() {
         return this.belongsTo('Diffuser_Category', 'category_id')
+    }, 
+    tags() {
+        return this.belongsToMany('Diffuser_Tag')
     }
+    
 })
 
 const Diffuser_Category = bookshelf.model('Diffuser_Category', {
@@ -17,4 +21,14 @@ const Diffuser_Category = bookshelf.model('Diffuser_Category', {
     }
 })
 
-module.exports = {Diffuser, Diffuser_Category}
+const Diffuser_Tag = bookshelf.model('Diffuser_Tag', {
+    tableName:'diffuser_tags', 
+    diffuser() {
+        return this.belongsToMany('Diffuser')
+    }
+})
+
+
+
+
+module.exports = {Diffuser, Diffuser_Category, Diffuser_Tag}

@@ -10,10 +10,11 @@ const diffuserDataLayer = require('../dal/diffuser')
 const { bootstrapField, createProductForm } = require('../forms')
 
 router.get('/', async (req, res) => {
-    const allCategories = await diffuserDataLayer.getAllCategory()
-    
-    const allDiffuser = await diffuserDataLayer.getAllDiffuser()
-
+    // const allCategories = await diffuserDataLayer.getAllCategory();
+    const allTags = await diffuserDataLayer.getAllTags();
+    // console.log(allTags);
+    const allDiffuser = await diffuserDataLayer.getAllDiffuser();
+    // console.log("All diffusers: ", allDiffuser.toJSON())
     res.render('products/diffuser', {
         'diffuser': allDiffuser.toJSON(),
     })
@@ -22,8 +23,8 @@ router.get('/', async (req, res) => {
 
 router.get('/create', async (req, res) => {
     const allCategories = await diffuserDataLayer.getAllCategory();
-
-    const createProduct = createProductForm(allCategories);
+    const allTags = await diffuserDataLayer.getAllTags()
+    const createProduct = createProductForm(allCategories, allTags);
 
     res.render('products/create', {
         'form': createProduct.toHTML(bootstrapField)
@@ -33,12 +34,19 @@ router.get('/create', async (req, res) => {
 // route to upload new stock
 router.post('/create', async (req, res) => {
     const allCategories = await diffuserDataLayer.getAllCategory();
-    const createProduct = createProductForm(allCategories);
+    const allTags = await diffuserDataLayer.getAllTags();
+
+    const createProduct = createProductForm(allCategories, allTags);
 
     createProduct.handle(req, {
         'success': async (form) => {
+            let {tags, ...productData} = form.data;
             const newItem = new Diffuser();
-            newItem.set(form.data)
+            newItem.set(productData)
+
+            if (tags) {
+                await newItem.tags().attach(tags.split(','))
+            }
             await newItem.save()
 
             res.redirect('/diffusers');
@@ -53,16 +61,22 @@ router.post('/create', async (req, res) => {
 
 router.get('/:diffuser_id/update', async (req, res) => {
     const getAllCategory = await diffuserDataLayer.getAllCategory();
-
+    const allTags = await diffuserDataLayer.getAllTags();
+    
     const diffuserToEdit = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
     const diffuserJSON = diffuserToEdit.toJSON()
 
-    const productForm = createProductForm(getAllCategory);
+    const productForm = createProductForm(getAllCategory, allTags);
     productForm.fields.diffuser_name.value = diffuserToEdit.get('diffuser_name')
     productForm.fields.description.value = diffuserToEdit.get('description')
     productForm.fields.cost.value = diffuserToEdit.get('cost')
     productForm.fields.category_id.value = diffuserToEdit.get('category_id')
     productForm.fields.stock.value = diffuserToEdit.get('stock')
+
+    // get previous tags of products
+    // const selectedTags = diffuserJSON.tags.
+
+    console.log("json diffuser: " ,diffuserJSON)
 
     res.render('products/update', {
         'form': productForm.toHTML(bootstrapField),

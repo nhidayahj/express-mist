@@ -33,7 +33,7 @@
                 <td>Image</td>
                 <td>{{this.diffuser_name}}</td>
                 <td>{{this.category.name}}</td>
-                <td>Tags</td>
+                <td>{{#each this.tags}}{{this.name}}{{/each}}</td>
                 <td>{{this.cost}}</td>
                 <td>{{this.stock}}</td>
                 <td><a href="/diffusers/{{this.id}}/update" class="btn btn-primary btn-sm ml-2">Update</a>

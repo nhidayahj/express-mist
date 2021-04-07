@@ -1,11 +1,8 @@
-const {Diffuser, Diffuser_Category} = require('../models')
+const {Diffuser, Diffuser_Category, Diffuser_Tag} = require('../models')
 
 
 const getAllDiffuser = async() => {
-    // return await Diffuser.fetchAll()
-    return await Diffuser.collection().fetch({
-        withRelated:['category']
-    })
+    return await Diffuser.fetchAll()
 }
 const getAllCategory = async() => {
     const allCategory = await Diffuser_Category
@@ -13,6 +10,13 @@ const getAllCategory = async() => {
             return [c.get('id'), c.get('name')]
         })
     return allCategory;
+}
+
+const getAllTags = async() => {
+    const allTags = await Diffuser_Tag.fetchAll().map((t) => {
+        return [t.get('id'), t.get('name')]
+    });
+    return allTags;
 }
 
 const getDiffuserById = async(diffuserId) => {
@@ -25,4 +29,5 @@ const getDiffuserById = async(diffuserId) => {
     return diffuser;
 }
 
-module.exports = {getAllDiffuser, getAllCategory,getDiffuserById}
+module.exports = {getAllDiffuser,getDiffuserById,
+                getAllCategory, getAllTags}
