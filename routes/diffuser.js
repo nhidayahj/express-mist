@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
     //convert diffuser object to json for form formatting 
     const diffuserJSON = allDiffuser.toJSON();
 
-    console.log("All Diffuser Object: ", diffuserJSON)
+    // console.log("All Diffuser Object: ", diffuserJSON)
     res.render('products/diffuser', {
         'diffuser': diffuserJSON,
     })

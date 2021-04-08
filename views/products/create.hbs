@@ -8,17 +8,31 @@
         <a href="/diffusers" class="btn btn-danger btn-sm mt-3 mb-4">Back</a>
         {{{form}}}
 
-        <input type="hidden" role="uploadcare-uploader" name="diffuser_image" />
-        <input type="submit" value="Add Product" class="btn btn-success" />
+        <div>
+            <input type="hidden" role="uploadcare-uploader" name="diffuser_image" data-tabs="file url" />
+            <img scr="" style="display:none" id="uploaded_img" alt="uploaded image"/>
+        </div>
+    
+        <input type="submit" value="Add Product" class="btn btn-success mt-4" />
     </form>
 </div>
 {{/block}}
 
 {{!-- Create the Uploadcare image widget --}}
 {{#block 'js'}}
-<script>UPLOADCARE_PUBLIC_KEY = 'b22936bcd39cc9d079d3'</script>
+<script>UPLOADCARE_PUBLIC_KEY = 'b22936bcd39cc9d079d3'
+    UPLOADCARE_CLEARABLE = true;
+</script>
 <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js" charset="utf-8"></script>
+<script>
+const widget = uploadcare.Widget('[role=uploadcare-uploader]');
+widget.onUploadComplete(function (info) {
+console.log("Image is uploaded")
+})
 
+
+
+</script>
 
 {{/block}}
 

@@ -80,6 +80,7 @@ const createProductForm = (categories, tags) => {
             widget: widgets.multipleSelect(tags),
             choices:tags
         })
+        
     })
 }
 
