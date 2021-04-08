@@ -11,10 +11,10 @@ const { bootstrapField, createProductForm } = require('../forms')
 
 router.get('/', async (req, res) => {
     // const allCategories = await diffuserDataLayer.getAllCategory();
-    const allTags = await diffuserDataLayer.getAllTags();
-    // console.log(allTags);
+    // const allTags = await diffuserDataLayer.getAllTags();
+    
     const allDiffuser = await diffuserDataLayer.getAllDiffuser();
-    // console.log("All diffusers: ", allDiffuser.toJSON())
+    // console.log("All Diffuser Object: ", allDiffuser.toJSON())
     res.render('products/diffuser', {
         'diffuser': allDiffuser.toJSON(),
     })
@@ -65,6 +65,11 @@ router.get('/:diffuser_id/update', async (req, res) => {
     
     const diffuserToEdit = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
     const diffuserJSON = diffuserToEdit.toJSON()
+    console.log("Diffuser to edit: ",diffuserJSON)
+     // get previous tags of products
+    const selectedTags = diffuserJSON.tags.map((t)=>{
+        return t.id
+    })
 
     const productForm = createProductForm(getAllCategory, allTags);
     productForm.fields.diffuser_name.value = diffuserToEdit.get('diffuser_name')
@@ -72,11 +77,9 @@ router.get('/:diffuser_id/update', async (req, res) => {
     productForm.fields.cost.value = diffuserToEdit.get('cost')
     productForm.fields.category_id.value = diffuserToEdit.get('category_id')
     productForm.fields.stock.value = diffuserToEdit.get('stock')
+    productForm.fields.tags.value = selectedTags;
+   
 
-    // get previous tags of products
-    // const selectedTags = diffuserJSON.tags.
-
-    console.log("json diffuser: " ,diffuserJSON)
 
     res.render('products/update', {
         'form': productForm.toHTML(bootstrapField),
@@ -88,6 +91,7 @@ router.get('/:diffuser_id/update', async (req, res) => {
 
 router.post('/:diffuser_id/update', async (req, res) => {
     const getAllCategory = diffuserDataLayer.getAllCategory();
+
     const diffuserToEdit = diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
 
     const productForm = createProductForm(getAllCategory);

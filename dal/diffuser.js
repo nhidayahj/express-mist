@@ -2,7 +2,10 @@ const {Diffuser, Diffuser_Category, Diffuser_Tag} = require('../models')
 
 
 const getAllDiffuser = async() => {
-    return await Diffuser.fetchAll()
+    return await Diffuser.collection().fetch({
+        require:false,
+        withRelated:['category']
+    });
 }
 const getAllCategory = async() => {
     const allCategory = await Diffuser_Category
@@ -24,7 +27,7 @@ const getDiffuserById = async(diffuserId) => {
         'id':diffuserId
     }).fetch({
         require:true,
-        withRelated:['category']
+        withRelated:['category','tags']
     })
     return diffuser;
 }
