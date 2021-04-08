@@ -8,16 +8,18 @@
         <a href="/diffusers" class="btn btn-danger btn-sm mt-3 mb-4">Back</a>
         {{{form}}}
 
-
-        <input type="submit" value="Add Product" class="btn btn-success"/>
+        <input type="hidden" role="uploadcare-uploader" name="diffuser_image" />
+        <input type="submit" value="Add Product" class="btn btn-success" />
     </form>
-
-
 </div>
+{{/block}}
 
+{{!-- Create the Uploadcare image widget --}}
+{{#block 'js'}}
+<script>UPLOADCARE_PUBLIC_KEY = 'b22936bcd39cc9d079d3'</script>
+<script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js" charset="utf-8"></script>
 
 
 {{/block}}
-
 
 {{/extends}}

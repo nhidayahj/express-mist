@@ -30,6 +30,10 @@
   padding: 0px 10px;
 }
 
+.badge-pill {
+    background-color: rgb(188, 110, 233);
+}
+
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}

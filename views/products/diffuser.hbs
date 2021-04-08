@@ -33,7 +33,7 @@
                 <td>Image</td>
                 <td>{{this.diffuser_name}}</td>
                 <td>{{this.category.name}}</td>
-                <td>{{#each this.tags}}{{this.name}}{{/each}}</td>
+                <td>{{#each this.tags}}<span class="badge badge-pill badge-info ml-2">{{this.name}}</span>{{/each}}</td>
                 <td>{{this.cost}}</td>
                 <td>{{this.stock}}</td>
                 <td>
@@ -44,8 +44,6 @@
             {{/each}}
         </tbody>
     </table>
-
-
 </div>
 
 {{/block}}
