@@ -9,6 +9,7 @@ const Diffuser = bookshelf.model('Diffuser', {
         return this.belongsTo('Diffuser_Category', 'category_id')
     }, 
     tags() {
+        // to confirm the migrtation mappings
         return this.belongsToMany('Diffuser_Tag', 'diffusers_diffuser_tags', 'diffuser_id')
     }
     

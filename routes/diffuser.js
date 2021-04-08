@@ -14,9 +14,13 @@ router.get('/', async (req, res) => {
     // const allTags = await diffuserDataLayer.getAllTags();
     
     const allDiffuser = await diffuserDataLayer.getAllDiffuser();
-    // console.log("All Diffuser Object: ", allDiffuser.toJSON())
+
+    //convert diffuser object to json for form formatting 
+    const diffuserJSON = allDiffuser.toJSON();
+
+    console.log("All Diffuser Object: ", diffuserJSON)
     res.render('products/diffuser', {
-        'diffuser': allDiffuser.toJSON(),
+        'diffuser': diffuserJSON,
     })
 })
 
@@ -65,19 +69,19 @@ router.get('/:diffuser_id/update', async (req, res) => {
     
     const diffuserToEdit = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
     const diffuserJSON = diffuserToEdit.toJSON()
-    console.log("Diffuser to edit: ",diffuserJSON)
+    // console.log("Diffuser to edit: ",diffuserJSON)
      // get previous tags of products
-    const selectedTags = diffuserJSON.tags.map((t)=>{
+    const existingTags = diffuserJSON.tags.map((t)=>{
         return t.id
     })
 
     const productForm = createProductForm(getAllCategory, allTags);
-    productForm.fields.diffuser_name.value = diffuserToEdit.get('diffuser_name')
-    productForm.fields.description.value = diffuserToEdit.get('description')
-    productForm.fields.cost.value = diffuserToEdit.get('cost')
-    productForm.fields.category_id.value = diffuserToEdit.get('category_id')
-    productForm.fields.stock.value = diffuserToEdit.get('stock')
-    productForm.fields.tags.value = selectedTags;
+    productForm.fields.diffuser_name.value = diffuserToEdit.get('diffuser_name');
+    productForm.fields.description.value = diffuserToEdit.get('description');
+    productForm.fields.cost.value = diffuserToEdit.get('cost');
+    productForm.fields.category_id.value = diffuserToEdit.get('category_id');
+    productForm.fields.stock.value = diffuserToEdit.get('stock');
+    productForm.fields.tags.value = existingTags;
    
 
 
@@ -90,22 +94,36 @@ router.get('/:diffuser_id/update', async (req, res) => {
 })
 
 router.post('/:diffuser_id/update', async (req, res) => {
-    const getAllCategory = diffuserDataLayer.getAllCategory();
-
-    const diffuserToEdit = diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
-
-    const productForm = createProductForm(getAllCategory);
+    const allCategory = diffuserDataLayer.getAllCategory();
+    const allTags = diffuserDataLayer.getAllTags();
+    const diffuserToEdit = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
+    // console.log("Diffuser to edit: ",diffuserToEdit.toJSON());
+    
+    // convert product object into JSON format
+    const diffuserJSON = diffuserToEdit.toJSON();
+    const productForm = createProductForm(allCategory, allTags);
+    
     productForm.handle(req, {
         'success': async (form) => {
-            diffuserToEdit.set(form.data);
+            let {tags, ...diffuserData} = form.data
+            diffuserToEdit.set(diffuserData);
             await diffuserToEdit.save();
 
-            res.redirect('products/diffuser');
+            // becuase caolan form processing requires such to format the array
+            let newSelectedTags = tags.split(',');
+            let existingTags = diffuserJSON.tags.map((t) => t.id)
+            
+            // remove existing tags
+            diffuserToEdit.tags().detach(existingTags);
+            diffuserToEdit.tags().attach(newSelectedTags);
+
+
+            res.redirect('/diffusers');
         },
         'error': (form) => {
             res.render('products/update', {
                 'form': form.toHTML(bootstrapField),
-                'diffuser': diffuserToEdit.toJSON()
+                'diffuser': diffuserJSON
             })
         }
     })

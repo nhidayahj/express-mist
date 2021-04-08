@@ -4,7 +4,7 @@
 
 {{#block 'content'}}
 
-<div class="container">
+<div class="">
     <h2>Display all products</h2>
 
     <div>
@@ -12,7 +12,7 @@
 
     </div>
 
-    <table class="table">
+    <table class="table" style="width: 75vw;">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">#</th>
@@ -36,7 +36,8 @@
                 <td>{{#each this.tags}}{{this.name}}{{/each}}</td>
                 <td>{{this.cost}}</td>
                 <td>{{this.stock}}</td>
-                <td><a href="/diffusers/{{this.id}}/update" class="btn btn-primary btn-sm ml-2">Update</a>
+                <td>
+                <a href="/diffusers/{{this.id}}/update" class="btn btn-primary btn-sm ml-2">Update</a>
                 <a href="/diffusers/{{this.id}}/remove" class="btn btn-danger btn-sm ml-2">Remove</a>
                 </td>
             </tr>
