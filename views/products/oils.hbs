@@ -1,14 +1,14 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<h2>Display oil products</h2>
+<h2>Essential Oil</h2>
 <div>
     <ul>
     {{#each oil}}
-        <li>Name: {{this.name}}</li>
+        <li style="color:cadetblue">Name: {{this.name}}</li>
         <li>Description: {{this.description}}</li>
         {{#each sizes}}
-        <li> Bottle Size: {{this.size}} ml</li>
+        <li style="color:blueviolet"> Bottle Size: {{this.size}} ml</li>
         {{/each}}
         {{#each tags}}
         <li><b>Tags: {{this.name}}</b></li>

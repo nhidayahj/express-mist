@@ -47,11 +47,11 @@ router.post('/create', async (req, res) => {
             let {tags, ...productData} = form.data;
             const newItem = new Diffuser();
             newItem.set(productData)
+            await newItem.save()
 
             if (tags) {
                 await newItem.tags().attach(tags.split(','))
             }
-            await newItem.save()
 
             res.redirect('/diffusers');
         },

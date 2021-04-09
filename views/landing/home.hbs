@@ -4,6 +4,55 @@
 {{#block 'content'}}
 <h2>Home Page</h2>
 
+<h3>Search Products</h3>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label>Product to search</label>
+        <select class="form-control" id="itemSearch">
+            <option value="">Choose a product type</option>
+            <option value="diffuser">Diffuser</option>
+            <option value="oil">Essential Oil</option>
+        </select>
+    </div>
+</div>
+    
+
+    
+
+
+<h4>Diffusers</h4>
+<ul>
+    {{#each diffuser}}
+        <li style="color:blueviolet">Name: {{this.diffuser_name}}</li>
+        <li style="color:rgb(226, 43, 217)">Category: {{this.category.name}}</li>
+        {{#each tags}}
+        <li>Tags: {{this.name}}</li>
+        {{/each}}
+    {{/each}}
+</ul>
+
+<h4>Essential Oil</h4>
+<ul>
+    {{#each oil}}
+        <li style="color:blueviolet">Name: {{this.name}}</li>
+        {{#each tags}}
+            <li style="color:rgb(226, 43, 217)">Tags: {{this.name}}</li>
+        {{/each}}
+    {{/each}}
+</ul>
+{{/block}}
+
+
+{{#block 'js'}}
+<script>
+    let itemToSearch = document.querySelector("#itemSearch");
+    let selectedItem;
+    
+    itemToSearch.addEventListener('change', function() {
+        let selectedProduct = document.querySelector("#itemSearch").value;
+        console.log("Search item: ",selectedProduct)
+    })
+</script>
 {{/block}}
 
 

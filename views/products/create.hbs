@@ -9,11 +9,11 @@
         {{{form}}}
 
         <div>
-            <input type="hidden" role="uploadcare-uploader" name="diffuser_image" data-tabs="file url" />
+            <input type="hidden" id="img" role="uploadcare-uploader" name="diffuser_image" data-tabs="file url" />
             <img scr="" style="display:none" id="uploaded_img" alt="uploaded image"/>
         </div>
     
-        <input type="submit" value="Add Product" class="btn btn-success mt-4" />
+        <input type="submit" id="upload_stock" value="Add Product" class="btn btn-success mt-4" />
     </form>
 </div>
 {{/block}}
@@ -25,12 +25,10 @@
 </script>
 <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js" charset="utf-8"></script>
 <script>
-const widget = uploadcare.Widget('[role=uploadcare-uploader]');
-widget.onUploadComplete(function (info) {
-console.log("Image is uploaded")
-})
 
-
+    document.querySelector("#upload_stock").addEventListener('click', function() {
+        document.querySelector("#id_image_url").value = document.querySelector("#img").value;
+    })
 
 </script>
 
