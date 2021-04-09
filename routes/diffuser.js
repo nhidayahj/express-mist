@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { Diffuser, Diffuser_Category } = require('../models')
+const { Diffuser, Diffuser_Category } = require('../models/diffusers')
 
 const diffuserDataLayer = require('../dal/diffuser')
 

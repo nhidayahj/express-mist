@@ -9,7 +9,6 @@ const Diffuser = bookshelf.model('Diffuser', {
         return this.belongsTo('Diffuser_Category', 'category_id')
     }, 
     tags() {
-        // to confirm the migrtation mappings
         return this.belongsToMany('Diffuser_Tag', 'diffusers_diffuser_tags', 'diffuser_id')
     }
     
@@ -29,21 +28,7 @@ const Diffuser_Tag = bookshelf.model('Diffuser_Tag', {
     }
 })
 
-const Oils = bookshelf.model('Oils', {
-    tableName:'oils', 
-    sizes() {
-        return this.belongsToMany('Sizes')
-    }
-})
-
-const Sizes = bookshelf.model('Sizes', {
-    tableName:'sizes',
-    oils(){
-        return this.belongsToMany('Oils')
-    }
-
-})
 
 
 
-module.exports = {Diffuser, Diffuser_Category, Diffuser_Tag, Oils, Sizes}
+module.exports = {Diffuser, Diffuser_Category, Diffuser_Tag}

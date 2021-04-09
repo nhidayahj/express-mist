@@ -1,4 +1,4 @@
-const {Diffuser, Diffuser_Category, Diffuser_Tag} = require('../models')
+const {Diffuser, Diffuser_Category, Diffuser_Tag} = require('../models/diffusers')
 
 
 const getAllDiffuser = async() => {

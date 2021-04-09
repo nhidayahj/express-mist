@@ -1,10 +1,10 @@
-const {Oils, Sizes} = require('../models');
+const {Oils, Sizes, Oil_Tag} = require('../models/oils');
 
 
 const getAllOils = async() => {
-    return await Oils.collection().fetchAll({
+    return await Oils.collection().fetch({
         require:false,
-        withRelated:['sizes']
+        withRelated:['sizes', 'tags']
     })
 }
 
@@ -15,4 +15,13 @@ const getAllSizes = async() => {
     return allSizes;
 }
 
-module.exports = {getAllOils, getAllSizes}
+const getAllTags = async() => {
+    const allTags = await Oil_Tag.fetchAll().map((t) =>{
+        return [t.get('id'), t.get('name')]
+    })
+    return allTags;
+}
+
+
+
+module.exports = {getAllOils, getAllSizes, getAllTags}

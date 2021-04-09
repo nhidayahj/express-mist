@@ -1,14 +1,18 @@
 const express = require('express');
 const router = express.Router();
 
-const {Oils} = require('../models');
+const {Oils} = require('../models/oils');
 const oilDataLayer = require('../dal/oils');
 
 
 router.get('/', async (req,res) => {
-    const allSizes = await oilDataLayer.getAllSizes;
+    const allOils = await oilDataLayer.getAllOils();
+    const allTags = await oilDataLayer.getAllTags();
+    const allOilsJSON = allOils.toJSON()
+    // console.log("All tags: ", allTags)
+    console.log('all oils: ', allOilsJSON);
     res.render('products/oils', {
-        'oil':allSizes
+        'oil':allOilsJSON
     })
 })
 
