@@ -29,7 +29,21 @@ const Diffuser_Tag = bookshelf.model('Diffuser_Tag', {
     }
 })
 
+const Oils = bookshelf.model('Oils', {
+    tableName:'oils', 
+    sizes() {
+        return this.belongsToMany('Sizes')
+    }
+})
+
+const Sizes = bookshelf.model('Sizes', {
+    tableName:'sizes',
+    oils(){
+        return this.belongsToMany('Oils')
+    }
+
+})
 
 
 
-module.exports = {Diffuser, Diffuser_Category, Diffuser_Tag}
+module.exports = {Diffuser, Diffuser_Category, Diffuser_Tag, Oils, Sizes}

@@ -56,8 +56,8 @@ router.post('/create', async (req, res) => {
             res.redirect('/diffusers');
         },
         'error': (form) => {
-            res.send("Please specify all fields");
-            res.render('diffusers/create', {
+            
+            res.render('products/create', {
                 'form': form.toHTML(bootstrapField)
             })
         }

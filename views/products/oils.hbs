@@ -1,0 +1,16 @@
+{{#extends 'base'}}
+
+{{#block 'content'}}
+<h2>Display oil products</h2>
+<div>
+    {{#each oil}}
+    <ul>
+        <li>Size: {{this.size}}</li>
+    </ul>
+    {{/each}}
+</div>
+
+
+{{/block}}
+
+{{/extends}}

@@ -19,13 +19,15 @@ app.use(
 );
 
 // import in routes 
-const landingRoute = require('./routes/landing')
-const diffuserRoute = require('./routes/diffuser')
+const landingRoute = require('./routes/landing');
+const diffuserRoute = require('./routes/diffuser');
+const oilsRoute = require('./routes/oils');
 
 async function main() {
 
     app.use('/', landingRoute)
     app.use('/diffusers', diffuserRoute)
+    app.use('/oils', oilsRoute)
 }
 
 main();
