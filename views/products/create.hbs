@@ -6,13 +6,16 @@
 <div>
     <form method="POST">
         <a href="/diffusers" class="btn btn-danger btn-sm mt-3 mb-4">Back</a>
+        <div>
+            <div class="form-group">
+                <label class="form-label text-primary">Product Image</label>
+                <input type="hidden" id="img" role="uploadcare-uploader" name="diffuser_image" data-tabs="file url" />
+            </div>
+            <img scr="" style="display:none" id="uploaded_img" alt="uploaded image" />
+        </div>
         {{{form}}}
 
-        <div>
-            <input type="hidden" id="img" role="uploadcare-uploader" name="diffuser_image" data-tabs="file url" />
-            <img scr="" style="display:none" id="uploaded_img" alt="uploaded image"/>
-        </div>
-    
+
         <input type="submit" id="upload_stock" value="Add Product" class="btn btn-success mt-4" />
     </form>
 </div>
@@ -26,7 +29,7 @@
 <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js" charset="utf-8"></script>
 <script>
 
-    document.querySelector("#upload_stock").addEventListener('click', function() {
+    document.querySelector("#upload_stock").addEventListener('click', function () {
         document.querySelector("#id_image_url").value = document.querySelector("#img").value;
     })
 

@@ -29,9 +29,15 @@
             {{#each diffuser}}
             <tr>
                 {{!-- <th scope="row">1</th> --}}
-                <td>{{this.id}}</td>
-                <td>Image</td>
-                <td>{{this.diffuser_name}}</td>
+                <td class="id"></td>
+                <td>
+                    {{#if this.image_url}}
+                    <img src="{{this.image_url}}" style="width:75px;height:95px"/>
+                    {{/if}}
+                </td>
+                <td>
+                    <a href="/diffusers/{{this.id}}/update">{{this.diffuser_name}}</a>
+                </td>
                 <td>{{this.category.name}}</td>
                 <td>{{#each this.tags}}<span class="badge badge-pill badge-info ml-2">{{this.name}}</span>{{/each}}</td>
                 <td>{{this.cost}}</td>
@@ -47,5 +53,10 @@
 </div>
 
 {{/block}}
+
+
+
+
+
 
 {{/extends}}

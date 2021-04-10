@@ -4,17 +4,48 @@
 {{#block 'content'}}
 <h2>Update Stock Item: {{diffuser.diffuser_name}}</h2>
 
-<a href="/diffusers" class="btn btn-danger btn-sm mt-3 mb-4">Cancel</a>
+
 <form method="POST">
-    {{{form}}}
+    <div>
 
-
-    <input type="submit" value="Update Item" class="btn btn-success btn-sm"/>
+        <img src="{{diffuser.image_url}}" style="width:150px;height:175px;margin-top:5px;margin-bottom:5px"
+            id="product_img" />
+        <div>
+            <input type="hidden" id="upload_img" role="uploadcare-uploader" />
+        </div>
+    </div>
+    <div class="mt-3">
+        {{{form}}}
+    </div>
+    <input id="update_btn" type="submit" value="Update Item" class="btn btn-success btn-sm mt-3" />
+    <a href="/diffusers" class="btn btn-danger btn-sm mt-3">Cancel</a>
 </form>
-
-
-
 {{/block}}
+
+{{#block 'js'}}
+<script>UPLOADCARE_PUBLIC_KEY = 'b22936bcd39cc9d079d3'
+    UPLOADCARE_CLEARABLE = true;
+</script>
+<script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js" charset="utf-8"></script>
+
+<script>
+    const diffuser = '{{diffuser.diffuser_name}}'
+    console.log(diffuser)
+
+    const img_link = document.querySelector("#product_img").src;
+    document.querySelector("#update_btn").addEventListener('click', function () {
+        if (img_link) {
+            document.querySelector("#id_image_url").value = img_link;
+        } else {
+            document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value;
+
+        }
+    })
+
+
+</script>
+{{/block}}
+
 
 
 {{/extends}}

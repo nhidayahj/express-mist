@@ -95,8 +95,8 @@ router.get('/:diffuser_id/update', async (req, res) => {
 })
 
 router.post('/:diffuser_id/update', async (req, res) => {
-    const allCategory = diffuserDataLayer.getAllCategory();
-    const allTags = diffuserDataLayer.getAllTags();
+    const allCategory = await diffuserDataLayer.getAllCategory();
+    const allTags = await diffuserDataLayer.getAllTags();
     const diffuserToEdit = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
     // console.log("Diffuser to edit: ",diffuserToEdit.toJSON());
     
