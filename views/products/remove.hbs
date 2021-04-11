@@ -4,14 +4,26 @@
 {{#block 'content'}}
 
 <div>
-    <h2>Delete stock item: {{diffuser.diffuser_name}}</h2>
+    {{#if diffuser}}
+        <h2>Delete stock item: {{diffuser.diffuser_name}}</h2>
+    {{else}}
+         <h2>Delete stock item: {{oil.name}}</h2>
+    {{/if}}
     <form method="POST">
         
         <div class="alert alert-danger">
-            <p>Are you sure you want to delete {{diffuser.diffuser_name}}?</p>
+            {{#if diffuser}}
+                <p>Are you sure you want to delete {{diffuser.diffuser_name}}?</p>
+            {{else}}
+                <p>Are you sure you want to delete {{oil.name}}?</p>
+            {{/if}}
         </div> 
         <input type="submit" class="btn btn-danger btn-sm" value="Yes"/>
-        <a href="/diffusers" class="btn btn-success btn-sm">No</a>
+        {{#if diffuser}}
+            <a href="/diffusers" class="btn btn-success btn-sm">No</a>
+        {{else}} 
+            <a href="/oils" class="btn btn-success btn-sm">No</a>
+        {{/if}}
     </form>
 </div>
 

@@ -26,17 +26,18 @@
                 {{#each oil}}
                 <td class="sku">{{this.id}}</td>
                 <td>
+                    
                     {{#if this.image_url}}
                     <img src="{{this.image_url}}" style="width:88px;height:95px" />
                     {{/if}}
                 </td>
                 <td>
-                    <a href="/oil/{{this.id}}/update">{{this.name}}</a>
+                    <a href="/oils/{{this.id}}/update">{{this.name}}</a>
                 </td>
                 <td>
                     {{#each sizes}}
                     <span class="size-badge badge badge-pill badge-info ml-2">
-                        {{this.size}}
+                        {{this.size}} mL
                     </span>
                     {{/each}}
                 </td>

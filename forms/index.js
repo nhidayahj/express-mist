@@ -136,7 +136,7 @@ const createOilForm = (sizes, tags) => {
             cssClasses: {
                 label:['form-label', 'text-primary'],
             }, 
-            widget:widgets.select(sizes),
+            widget:widgets.multipleSelect(sizes),
             choices:sizes
         }),
         'tags':fields.string({

@@ -3,20 +3,20 @@
 
 {{#block 'content'}}
 {{#if diffuser}}
-    <h2>Update Stock Item: {{diffuser.diffuser_name}}</h2>
-    {{else}}
-    <h2>Update Stock Item: {{oil.name}}</h2>
+<h2>Update Stock Item: {{diffuser.diffuser_name}}</h2>
+{{else}}
+<h2>Update Stock Item: {{oil.name}}</h2>
 {{/if}}
 
 
 <form method="POST">
     <div>
         {{#if diffuser}}
-            <img src="{{diffuser.image_url}}" style="width:150px;height:175px;margin-top:5px;margin-bottom:5px"
-            id="product_img" />
+        <img src="{{diffuser.image_url}}" style="width:150px;height:175px;margin-top:5px;margin-bottom:5px"
+            id="product_img_diffuser" />
         {{else}}
-            <img src="{{oil.image_url}}" style="width:150px;height:175px;margin-top:5px;margin-bottom:5px"
-            id="product_img" />
+        <img src="{{oil.image_url}}" style="width:150px;height:175px;margin-top:5px;margin-bottom:5px"
+            id="product_img_oil" />
         {{/if}}
         <div>
             <input type="hidden" id="upload_img" role="uploadcare-uploader" />
@@ -27,9 +27,9 @@
     </div>
     <input id="update_btn" type="submit" value="Update Item" class="btn btn-success btn-sm mt-3" />
     {{#if diffuser}}
-        <a href="/diffusers" class="btn btn-danger btn-sm mt-3">Cancel</a>
+    <a href="/diffusers" class="btn btn-danger btn-sm mt-3">Cancel</a>
     {{else}}
-        <a href="/oils" class="btn btn-danger btn-sm mt-3">Cancel</a>
+    <a href="/oils" class="btn btn-danger btn-sm mt-3">Cancel</a>
     {{/if}}
 </form>
 {{/block}}
@@ -41,18 +41,32 @@
 <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js" charset="utf-8"></script>
 
 <script>
-    const diffuser = '{{diffuser.diffuser_name}}'
-    console.log(diffuser)
+    const product = '{{product}}'
+    console.log(product)
 
-    const img_link = document.querySelector("#product_img").src;
-    document.querySelector("#update_btn").addEventListener('click', function () {
-        if (img_link) {
-            document.querySelector("#id_image_url").value = img_link;
-        } else {
+
+    if (product === "diffuser") {
+        console.log("update post for diffuser");
+        let img_link = document.querySelector("#product_img_diffuser").src;
+        let upload_img = document.querySelector("#upload_img").value;
+        console.log("Diffuser img link: ", img_link);
+        console.log("Uploaded img:", upload_img)
+        document.querySelector("#update_btn").addEventListener('click', function () {
+
+            if (upload_img == "") {
+                document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value;
+            } else {
+                document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value;
+            }
+        })
+    }
+
+    if (product === "oil") {
+        document.querySelector("#update_btn").addEventListener("click", function () {
             document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value;
+        })
+    }
 
-        }
-    })
 
 
 </script>

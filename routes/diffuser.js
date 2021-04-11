@@ -88,7 +88,8 @@ router.get('/:diffuser_id/update', async (req, res) => {
 
     res.render('products/update', {
         'form': productForm.toHTML(bootstrapField),
-        'diffuser': diffuserJSON
+        'diffuser': diffuserJSON,
+        'product':"diffuser"
     })
 
 
@@ -124,7 +125,8 @@ router.post('/:diffuser_id/update', async (req, res) => {
         'error': (form) => {
             res.render('products/update', {
                 'form': form.toHTML(bootstrapField),
-                'diffuser': diffuserJSON
+                'diffuser': diffuserJSON,
+                
             })
         }
     })
