@@ -20,9 +20,22 @@
         <a href="/oils">Essential Oil</a>
         <a href="#">Orders</a>
     </div>
-    <div class="container">
+
+    <section class="container">
+        {{#if success_messages}}
+            {{#each success_messages}}
+                <div class="alert alert-success">{{this}}</div>
+            {{/each}}
+        {{/if}}
+
+        {{#if error_messages}}
+            {{#each error_messages}}
+                <div class="alert alert-danger">{{this}}</div>
+            {{/each}}
+        {{/if}}
+
         {{#block 'content'}}{{/block}}
-    </div>
+    </section>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

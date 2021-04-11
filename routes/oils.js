@@ -50,13 +50,14 @@ router.post('/create', async(req,res) => {
             if (tags) {
                 await newItem.tags().attach(tags.split(','))
             }
-
+            req.flash("success_messages", `${newItem.get('name')} is successfully added.`)
             res.redirect('/oils');
         },
         'error': (form) => {
             res.render('products/create', {
                 'form': form.toHTML(bootstrapField),
             })
+            req.flash("error_messages", `Error adding product. Please try again.`)
         }
     })
 
@@ -122,6 +123,7 @@ router.post('/:oil_id/update', async (req,res) => {
             oilToEdit.tags().detach(existingTags);
             oilToEdit.tags().attach(newSelectedTags);
 
+            req.flash("success_messages", `${oilToEdit.get('name')} is successfully updated.`)
             res.redirect('/oils');
         },
         'error': (form) => {
@@ -129,6 +131,7 @@ router.post('/:oil_id/update', async (req,res) => {
                 'form': form.toHTML(bootstrapField),
                 'oil': oilToEditJSON
             })
+            req.flash("error_messages", `Error updating product. Please try again`);
         }
     })
 
@@ -143,7 +146,9 @@ router.get('/:oil_id/remove', async (req,res) => {
 
 router.post('/:oil_id/remove', async(req,res) => {
     const oilToRemove = await oilDataLayer.getOilById(req.params.oil_id);
+    let stock = oilToRemove.get("name");
     await oilToRemove.destroy();
+    req.flash("success_messages", `${stock} successfully deleted.`)
     res.redirect('/oils')
 })
 

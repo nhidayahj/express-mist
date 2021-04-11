@@ -54,12 +54,16 @@ router.post('/create', async (req, res) => {
                 await newItem.tags().attach(tags.split(','))
             }
 
+            req.flash("success_messages", `New diffuser product: ${newItem.get('diffuser_name')}
+                        has been added.`)
             res.redirect('/diffusers');
         },
         'error': (form) => {
+            req.flash("error_messages", `There is error in the creation. Please try again.`)
             res.render('products/create', {
                 'form': form.toHTML(bootstrapField),
             })
+            
         }
     })
 })
@@ -119,14 +123,14 @@ router.post('/:diffuser_id/update', async (req, res) => {
             diffuserToEdit.tags().detach(existingTags);
             diffuserToEdit.tags().attach(newSelectedTags);
 
-
+            req.flash("success_messages", `${diffuserToEdit.get('diffuser_name')} is successfully updated.`)
             res.redirect('/diffusers');
         },
         'error': (form) => {
+            req.flash("error_messages", `Error updating existing product. Please try again.`)
             res.render('products/update', {
                 'form': form.toHTML(bootstrapField),
                 'diffuser': diffuserJSON,
-                
             })
         }
     })
@@ -142,7 +146,9 @@ router.get('/:diffuser_id/remove', async (req, res) => {
 
 router.post('/:diffuser_id/remove', async (req, res) => {
     const diffuserToRemove = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
+    let stock = oilToRemove.get("name");
     await diffuserToRemove.destroy();
+    req.flash("success_messages", `${stock} successfully deleted.`)
     res.redirect('/diffusers')
 })
 

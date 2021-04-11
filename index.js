@@ -2,6 +2,9 @@ const express = require('express');
 const hbs = require('hbs');
 const wax = require('wax-on')
 require('dotenv').config();
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
+const flash = require('connect-flash');
 
 let app = express();
 
@@ -17,6 +20,20 @@ app.use(
         extended:false
     })
 );
+
+app.use(session({
+    'store': new FileStore(),
+    'secret':process.env.SESSION_SECRET_KEY,
+    'resave':false,
+    'saveUninitialized':true
+}))
+
+app.use(flash());
+app.use(function (req,res,next) {
+    res.locals.success_messages = req.flash("success_messages");
+    res.locals.error_messages = req.flash("error_messages");
+    next();
+})
 
 // import in routes 
 const landingRoute = require('./routes/landing');
