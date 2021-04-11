@@ -62,5 +62,18 @@ router.post('/create', async(req,res) => {
 
 })
 
+router.get('/:oil_id/update', async(req,res) => {
+    const oil = await oilDataLayer.getOilById(req.params.oil_id);
+    const oilSizes = await oilDataLayer.getAllSizes();
+    const oilTags = await oilDataLayer.getAllTags();
+    const oilJSON = oil.toJSON()
+
+    const oilToEdit = createOilForm(oilSizes, oilTags)
+
+    res.render('products/update', {
+        'form':oilToEdit.toHTML(bootstrapField),
+        'oil':oilJSON
+    })
+})
 
 module.exports = router;

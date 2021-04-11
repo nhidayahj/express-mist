@@ -8,6 +8,16 @@ const getAllOils = async() => {
     })
 }
 
+const getOilById = async(oilId) => {
+    const oil = await Oils.where({
+        'id':oilId
+    }).fetch({
+        require:false,
+        withRelated:['sizes', 'tags']
+    })
+    return oil;
+}
+
 const getAllSizes = async() => {
     const allSizes = await Sizes.fetchAll().map((s) => {
         return [s.get('id'), s.get('size')]
@@ -24,4 +34,4 @@ const getAllTags = async() => {
 
 
 
-module.exports = {getAllOils, getAllSizes, getAllTags}
+module.exports = {getAllOils, getAllSizes, getAllTags, getOilById}
