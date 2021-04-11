@@ -39,12 +39,14 @@ app.use(function (req,res,next) {
 const landingRoute = require('./routes/landing');
 const diffuserRoute = require('./routes/diffuser');
 const oilsRoute = require('./routes/oils');
+const userRoute = require('./routes/users');
 
 async function main() {
 
-    app.use('/', landingRoute)
-    app.use('/diffusers', diffuserRoute)
-    app.use('/oils', oilsRoute)
+    app.use('/', landingRoute);
+    app.use('/diffusers', diffuserRoute);
+    app.use('/oils', oilsRoute);
+    app.use('/user', userRoute);
 }
 
 main();

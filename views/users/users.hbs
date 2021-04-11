@@ -1,0 +1,21 @@
+{{#extends 'base'}}
+{{#block 'title'}}Aroma Mister - All Vendors{{/block}}
+
+{{#block 'content'}}
+<h2>Display All Users</h2>
+
+<div>
+    <h3>User Info</h3>
+    <ul>
+        {{#each user}}
+        <li>Email: {{this.email}}</li>
+        <li>Role: {{this.roles.role}}</li>
+        <li>Username: {{this.username}}</li>
+        <li>Work Id: {{this.workId}}</li>
+        {{/each}}
+    </ul>
+</div>
+
+
+{{/block}}
+{{/extends}}
