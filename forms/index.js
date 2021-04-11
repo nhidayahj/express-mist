@@ -92,4 +92,73 @@ const createProductForm = (categories, tags) => {
     })
 }
 
-module.exports = {bootstrapField, createProductForm};
+const createOilForm = (sizes, tags) => {
+    return forms.create({
+        'name':fields.string({
+            label:'Product Name',
+            required:true,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }
+        }),
+        'description':fields.string({
+            label:'Item Description',
+            required:true,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            widget:widgets.textarea()
+        }),
+        'stock':fields.string({
+            label:'Stock',
+            required:true,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            validators:[validators.integer()]
+        }),
+        'cost':fields.string({
+            label:'Cost (in cents)',
+            required:true,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            validators:[validators.integer()]
+        }),
+        'sizes':fields.string({
+            label:'Bottle Size (in mL)',
+            required:true,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }, 
+            widget:widgets.multipleSelect(sizes),
+            choices:sizes
+        }),
+        'tags':fields.string({
+            label:'Tags',
+            required:true,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            widget:widgets.multipleSelect(tags),
+            choices:tags
+        }),
+        'image_url':fields.string({
+            required:true,
+            errorAfterField:true,
+            cssClasses:{
+                label:['form-label', 'text-primary']
+            },
+            widget:widgets.hidden()
+        })
+              
+    })
+}
+
+module.exports = {bootstrapField, createProductForm, createOilForm};

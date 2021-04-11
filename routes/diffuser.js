@@ -31,7 +31,8 @@ router.get('/create', async (req, res) => {
     const createProduct = createProductForm(allCategories, allTags);
 
     res.render('products/create', {
-        'form': createProduct.toHTML(bootstrapField)
+        'form': createProduct.toHTML(bootstrapField),
+        'diffuser':"diffuser"
     })
 })
 
@@ -56,9 +57,8 @@ router.post('/create', async (req, res) => {
             res.redirect('/diffusers');
         },
         'error': (form) => {
-            
             res.render('products/create', {
-                'form': form.toHTML(bootstrapField)
+                'form': form.toHTML(bootstrapField),
             })
         }
     })
