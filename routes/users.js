@@ -1,10 +1,16 @@
 const express = require('express');
 const router = express.Router();
-
+const crypto = require('crypto')
 const userDataLayer = require('../dal/users');
 const {User, Role} = require('../models/users');
-const {bootstrapField, registerUserForm} = require('../forms/users')
+const {bootstrapField, registerUserForm, vendorLoginForm} = require('../forms/users')
 
+
+const getHashedPassword = (password) => {
+    const sha256 = crypto.createHash('sha256');
+    const hash = sha256.update(password).digest('base64');
+    return hash;
+}
 
 router.get('/', async(req,res) => {
     const allVendors = await userDataLayer.getAllVendors();
@@ -29,11 +35,12 @@ router.post('/register', async(req,res) => {
     registerVendorForm.handle(req,{
         'success':async(form) => {
             let{confirm_password, ...userForm} = form.data;
+            userForm.password = getHashedPassword(userForm.password);
             const newVendor = new User(userForm);
             await newVendor.save();
 
             req.flash("success_message", `New user: ${newVendor.get('email')} successfully added.`)
-            res.redirect('/user');
+            res.redirect('/users');
         }, 
         'error': (form) => {
             res.render('users/signup', {
@@ -44,6 +51,63 @@ router.post('/register', async(req,res) => {
     })
 })
 
+router.get('/login', async(req,res) => {
+    const allRoles = await userDataLayer.getAllRoles();
+    const vendorLogin = vendorLoginForm(allRoles);
+    res.render('users/login', {
+        'form':vendorLogin.toHTML(bootstrapField)
+    })
+
+})
+
+router.post('/login', async(req,res) => {
+    const roles = await userDataLayer.getAllRoles();
+    const vendorLogin = vendorLoginForm(roles);
+
+    vendorLogin.handle(req, {
+        'success':async(form) => {
+            let vendor = await User.where({
+                'email':form.data.email
+            }).fetch({
+                require:false
+            })
+
+            if (!vendor) {
+                req.flash("error_messages", `Login access failed. Please try again. If 
+                            problem still persist, please contact your administrator.`)
+                res.redirect('users/login')
+            } else {
+                if (vendor.get('password') == getHashedPassword(form.data.password)) {
+                    // store the user details 
+                    req.session.user = {
+                        id:vendor.get('id'),
+                        username:vendor.get('username'),
+                        workId:vendor.get('workId'),
+                        email:vendor.get('email'), 
+                        role:vendor.get('role_id')
+                    }
+                    console.log(req.session.user)
+                    req.flash("success_messages", `Welcome back, ${req.session.user.username}`);
+                    res.redirect("/users");
+                } else {
+                    req.flash("error_messages", "Login details does not exists. Please try again.");
+                    res.redirect('/users/login')
+                }
+            }
+        }, 
+        'error': (form) => {
+            res.render('users/login', {
+                'form':form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+router.get('/logout', async(req,res) => {
+    req.session.user = null;
+    req.flash('success_messages', 'Bye bye');
+    res.redirect('/users')
+})
 
 
 module.exports = router;

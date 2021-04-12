@@ -7,7 +7,8 @@ const { Diffuser, Diffuser_Category } = require('../models/diffusers')
 
 const diffuserDataLayer = require('../dal/diffuser')
 
-const { bootstrapField, createProductForm } = require('../forms')
+const { bootstrapField, createProductForm } = require('../forms');
+const {checkIfAuthenticated} = require('../middleware')
 
 router.get('/', async (req, res) => {
     // const allCategories = await diffuserDataLayer.getAllCategory();
@@ -25,7 +26,7 @@ router.get('/', async (req, res) => {
 })
 
 
-router.get('/create', async (req, res) => {
+router.get('/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await diffuserDataLayer.getAllCategory();
     const allTags = await diffuserDataLayer.getAllTags()
     const createProduct = createProductForm(allCategories, allTags);
@@ -37,7 +38,7 @@ router.get('/create', async (req, res) => {
 })
 
 // route to upload new stock
-router.post('/create', async (req, res) => {
+router.post('/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await diffuserDataLayer.getAllCategory();
     const allTags = await diffuserDataLayer.getAllTags();
 
@@ -68,7 +69,7 @@ router.post('/create', async (req, res) => {
     })
 })
 
-router.get('/:diffuser_id/update', async (req, res) => {
+router.get('/:diffuser_id/update', checkIfAuthenticated, async (req, res) => {
     const getAllCategory = await diffuserDataLayer.getAllCategory();
     const allTags = await diffuserDataLayer.getAllTags();
     
@@ -87,6 +88,8 @@ router.get('/:diffuser_id/update', async (req, res) => {
     productForm.fields.category_id.value = diffuserToEdit.get('category_id');
     productForm.fields.stock.value = diffuserToEdit.get('stock');
     productForm.fields.tags.value = existingTags;
+    productForm.fields.image_url.value = diffuserToEdit.get('image_url');
+    
    
 
 
@@ -99,7 +102,7 @@ router.get('/:diffuser_id/update', async (req, res) => {
 
 })
 
-router.post('/:diffuser_id/update', async (req, res) => {
+router.post('/:diffuser_id/update', checkIfAuthenticated, async (req, res) => {
     const allCategory = await diffuserDataLayer.getAllCategory();
     const allTags = await diffuserDataLayer.getAllTags();
     const diffuserToEdit = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
@@ -137,14 +140,14 @@ router.post('/:diffuser_id/update', async (req, res) => {
 
 })
 
-router.get('/:diffuser_id/remove', async (req, res) => {
+router.get('/:diffuser_id/remove', checkIfAuthenticated, async (req, res) => {
     const diffuserToRemove = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
     res.render('products/remove', {
         'diffuser': diffuserToRemove.toJSON()
     })
 })
 
-router.post('/:diffuser_id/remove', async (req, res) => {
+router.post('/:diffuser_id/remove', checkIfAuthenticated, async (req, res) => {
     const diffuserToRemove = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
     let stock = oilToRemove.get("name");
     await diffuserToRemove.destroy();

@@ -24,6 +24,7 @@ var bootstrapField = function (name, object){
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
+// for diffuser form
 const createProductForm = (categories, tags) => {
     return forms.create({
         'diffuser_name':fields.string({
@@ -92,6 +93,7 @@ const createProductForm = (categories, tags) => {
     })
 }
 
+// for oil form
 const createOilForm = (sizes, tags) => {
     return forms.create({
         'name':fields.string({

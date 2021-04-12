@@ -35,18 +35,29 @@ app.use(function (req,res,next) {
     next();
 })
 
+// global middleware
+app.use(function (req,res, next) {
+    res.locals.user = req.session.user;
+    next();
+})
+
 // import in routes 
 const landingRoute = require('./routes/landing');
 const diffuserRoute = require('./routes/diffuser');
 const oilsRoute = require('./routes/oils');
 const userRoute = require('./routes/users');
 
+const api = {
+    'members':require('./routes/api/members')
+}
+
 async function main() {
 
     app.use('/', landingRoute);
     app.use('/diffusers', diffuserRoute);
     app.use('/oils', oilsRoute);
-    app.use('/user', userRoute);
+    app.use('/users', userRoute);
+    app.use('/api/members', express.json(), api.members)
 }
 
 main();

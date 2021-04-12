@@ -7,6 +7,10 @@ const User = bookshelf.model('User', {
     }
 })
 
+const Member = bookshelf.model('Member', {
+    tableName:'users_customers'
+})
+
 const Role = bookshelf.model('Role', {
     tableName:'vendors_roles',
     user() {
@@ -14,4 +18,4 @@ const Role = bookshelf.model('Role', {
     }
 })
 
-module.exports = {User, Role}
+module.exports = {User, Member, Role}

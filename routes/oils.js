@@ -5,6 +5,7 @@ const {Oils} = require('../models/oils');
 const oilDataLayer = require('../dal/oils');
 
 const {bootstrapField, createOilForm} = require('../forms');
+const {checkIfAuthenticated} = require('../middleware')
 
 router.get('/', async (req,res) => {
     const allOils = await oilDataLayer.getAllOils();
@@ -16,7 +17,7 @@ router.get('/', async (req,res) => {
     })
 })
 
-router.get('/create', async(req,res) => {
+router.get('/create', checkIfAuthenticated, async(req,res) => {
     const allOils = await oilDataLayer.getAllOils();
     const allSizes = await oilDataLayer.getAllSizes();
     const allTags = await oilDataLayer.getAllTags();
@@ -31,7 +32,7 @@ router.get('/create', async(req,res) => {
 
 })
 
-router.post('/create', async(req,res) => {
+router.post('/create', checkIfAuthenticated, async(req,res) => {
     const allSizes = await oilDataLayer.getAllSizes();
     const allTags = await oilDataLayer.getAllTags();
 
@@ -63,7 +64,7 @@ router.post('/create', async(req,res) => {
 
 })
 
-router.get('/:oil_id/update', async(req,res) => {
+router.get('/:oil_id/update', checkIfAuthenticated, async(req,res) => {
     const oil = await oilDataLayer.getOilById(req.params.oil_id);
     const oilSizes = await oilDataLayer.getAllSizes();
     const oilTags = await oilDataLayer.getAllTags();
@@ -94,7 +95,7 @@ router.get('/:oil_id/update', async(req,res) => {
     })
 })
 
-router.post('/:oil_id/update', async (req,res) => {
+router.post('/:oil_id/update', checkIfAuthenticated, async (req,res) => {
     const oilToEdit = await oilDataLayer.getOilById(req.params.oil_id);
     const oilToEditJSON = oilToEdit.toJSON();
     const allSizes = await oilDataLayer.getAllSizes();
@@ -137,14 +138,14 @@ router.post('/:oil_id/update', async (req,res) => {
 
 })
 
-router.get('/:oil_id/remove', async (req,res) => {
+router.get('/:oil_id/remove', checkIfAuthenticated, async (req,res) => {
     const oilToRemove = await oilDataLayer.getOilById(req.params.oil_id);
     res.render('products/remove', {
         'oil': oilToRemove.toJSON()
     })
 })
 
-router.post('/:oil_id/remove', async(req,res) => {
+router.post('/:oil_id/remove', checkIfAuthenticated, async(req,res) => {
     const oilToRemove = await oilDataLayer.getOilById(req.params.oil_id);
     let stock = oilToRemove.get("name");
     await oilToRemove.destroy();

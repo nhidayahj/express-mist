@@ -44,24 +44,15 @@
     const product = '{{product}}'
     console.log(product)
 
-
     if (product === "diffuser") {
         console.log("update post for diffuser");
-        let img_link = document.querySelector("#product_img_diffuser").src;
-        let upload_img = document.querySelector("#upload_img").value;
-        console.log("Diffuser img link: ", img_link);
-        console.log("Uploaded img:", upload_img)
         document.querySelector("#update_btn").addEventListener('click', function () {
-
-            if (upload_img == "") {
-                document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value;
-            } else {
-                document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value;
-            }
+            document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value
         })
     }
 
     if (product === "oil") {
+        console.log("update post for oil");
         document.querySelector("#update_btn").addEventListener("click", function () {
             document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value;
         })
