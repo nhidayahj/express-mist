@@ -105,7 +105,7 @@ router.post('/login', async(req,res) => {
 
 router.get('/logout', async(req,res) => {
     req.session.user = null;
-    req.flash('success_messages', 'Bye bye');
+    req.flash('success_messages', 'Successfully logged out.');
     res.redirect('/users')
 })
 

@@ -10,6 +10,7 @@
 
 
 <form method="POST">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
     <div>
         {{#if diffuser}}
         <img src="{{diffuser.image_url}}" style="width:150px;height:175px;margin-top:5px;margin-bottom:5px"

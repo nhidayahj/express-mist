@@ -5,10 +5,15 @@ require('dotenv').config();
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 const flash = require('connect-flash');
+const csrf = require('csurf');
+// cors is only for browser use
+const cors = require('cors');
 
 let app = express();
 
 app.set("view engine", 'hbs')
+
+app.use(cors());
 
 app.use(express.static("public"))
 
@@ -35,9 +40,18 @@ app.use(function (req,res,next) {
     next();
 })
 
-// global middleware
+// share CSRF with hbs file
+
+
+// global middleware to shared with hbs file
 app.use(function (req,res, next) {
     res.locals.user = req.session.user;
+    next();
+})
+
+app.use(csrf());
+app.use(function(req,res,next) {
+    res.locals.csrfToken = req.csrfToken();
     next();
 })
 

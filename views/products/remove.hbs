@@ -10,7 +10,7 @@
          <h2>Delete stock item: {{oil.name}}</h2>
     {{/if}}
     <form method="POST">
-        
+        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
         <div class="alert alert-danger">
             {{#if diffuser}}
                 <p>Are you sure you want to delete {{diffuser.diffuser_name}}?</p>

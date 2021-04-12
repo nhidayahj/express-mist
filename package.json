@@ -19,6 +19,8 @@
   "dependencies": {
     "bookshelf": "^1.2.0",
     "connect-flash": "^0.1.1",
+    "cors": "^2.8.5",
+    "csurf": "^1.11.0",
     "db-migrate": "^0.11.12",
     "db-migrate-mysql": "^2.1.2",
     "dotenv": "^8.2.0",
