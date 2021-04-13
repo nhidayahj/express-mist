@@ -1,3 +1,5 @@
+
+
 const checkIfAuthenticated = (req,res, next) => {
     if (req.session.user) {
         next();
@@ -6,5 +8,7 @@ const checkIfAuthenticated = (req,res, next) => {
         res.redirect('/users/login')
     }
 }
+
+
 
 module.exports = {checkIfAuthenticated}

@@ -1,4 +1,4 @@
-const {User, Role}  = require('../models/users');
+const {User, Role}  = require('../models/diffusers');
 
 const getAllVendors = async() => {
     return await User.collection().fetch({
@@ -13,5 +13,6 @@ const getAllRoles = async() => {
     })
     return allRoles;
 }
+
 
 module.exports = {getAllRoles, getAllVendors}

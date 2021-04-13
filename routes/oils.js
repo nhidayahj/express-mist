@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {Oils} = require('../models/oils');
+const {Oils} = require('../models/diffusers');
 const oilDataLayer = require('../dal/oils');
 
 const {bootstrapField, createOilForm} = require('../forms');
@@ -84,6 +84,7 @@ router.get('/:oil_id/update', checkIfAuthenticated, async(req,res) => {
     oilForm.fields.description.value = oil.get('description');
     oilForm.fields.cost.value = oil.get('cost');
     oilForm.fields.stock.value = oil.get('stock');
+    oilForm.fields.image_url.value = oil.get('image_url');
     oilForm.fields.sizes.value = sizes;
     oilForm.fields.tags.value = existingTags;
 

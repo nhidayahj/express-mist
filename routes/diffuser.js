@@ -90,7 +90,7 @@ router.get('/:diffuser_id/update', checkIfAuthenticated, async (req, res) => {
     productForm.fields.tags.value = existingTags;
     productForm.fields.image_url.value = diffuserToEdit.get('image_url');
     
-   
+   console.log(diffuserToEdit.get('image_url'))
 
 
     res.render('products/update', {
@@ -130,11 +130,12 @@ router.post('/:diffuser_id/update', checkIfAuthenticated, async (req, res) => {
             res.redirect('/diffusers');
         },
         'error': (form) => {
-            req.flash("error_messages", `Error updating existing product. Please try again.`)
+            
             res.render('products/update', {
                 'form': form.toHTML(bootstrapField),
                 'diffuser': diffuserJSON,
             })
+            req.flash("error_messages", `Error updating existing product. Please try again.`)
         }
     })
 

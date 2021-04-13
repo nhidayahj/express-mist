@@ -28,7 +28,63 @@ const Diffuser_Tag = bookshelf.model('Diffuser_Tag', {
     }
 })
 
+const DiffuserCartItem = bookshelf.model('DiffuserCartItem', {
+    tableName:'diffuser_cart_items',
+    diffusers() {
+        return this.belongsTo('Diffuser')
+    },
+    customers() {
+        return this.belongsTo('Member')
+    }
+})
+
+const Oils = bookshelf.model('Oils', {
+    tableName:'oils', 
+    sizes() {
+        return this.belongsToMany('Sizes')
+    }, 
+    tags() {
+        return this.belongsToMany('Oil_Tag', 'oils_oil_tags', 'oil_id')
+    }
+})
+
+const Sizes = bookshelf.model('Sizes', {
+    tableName:'sizes',
+    oils(){
+        return this.belongsToMany('Oils')
+    }
+
+})
+
+const Oil_Tag = bookshelf.model('Oil_Tag',{
+    tableName:'oil_tags',
+    oils() {
+        return this.belongsToMany('Oils', 'oils_oil_tags', 'oil_tag_id')
+    }
+})
+
+// User here refers to the Vendors
+const User = bookshelf.model('User', {
+    tableName:'users_vendors',
+    roles() {
+        return this.belongsTo('Role', 'role_id')
+    }
+})
+
+// Role for the Vendors
+const Role = bookshelf.model('Role', {
+    tableName:'vendors_roles',
+    user() {
+        return this.hasMany('User')
+    }
+})
 
 
+const Member = bookshelf.model('Member', {
+    tableName:'users_customers'
+})
 
-module.exports = {Diffuser, Diffuser_Category, Diffuser_Tag}
+
+module.exports = {Diffuser, Diffuser_Category, Diffuser_Tag, DiffuserCartItem, 
+                    Oils, Sizes, Oil_Tag, 
+                    User, Member, Role}

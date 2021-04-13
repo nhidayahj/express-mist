@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto')
 const userDataLayer = require('../dal/users');
-const {User, Role} = require('../models/users');
+const {User, Role} = require('../models/diffusers');
 const {bootstrapField, registerUserForm, vendorLoginForm} = require('../forms/users')
 
 
@@ -52,8 +52,8 @@ router.post('/register', async(req,res) => {
 })
 
 router.get('/login', async(req,res) => {
-    const allRoles = await userDataLayer.getAllRoles();
-    const vendorLogin = vendorLoginForm(allRoles);
+    // const allRoles = await userDataLayer.getAllRoles();
+    const vendorLogin = vendorLoginForm();
     res.render('users/login', {
         'form':vendorLogin.toHTML(bootstrapField)
     })
@@ -61,8 +61,8 @@ router.get('/login', async(req,res) => {
 })
 
 router.post('/login', async(req,res) => {
-    const roles = await userDataLayer.getAllRoles();
-    const vendorLogin = vendorLoginForm(roles);
+    // const roles = await userDataLayer.getAllRoles();
+    const vendorLogin = vendorLoginForm();
 
     vendorLogin.handle(req, {
         'success':async(form) => {

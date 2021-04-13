@@ -1,4 +1,4 @@
-const {Oils, Sizes, Oil_Tag} = require('../models/oils');
+const {Oils, Sizes, Oil_Tag} = require('../models/diffusers');
 
 
 const getAllOils = async() => {

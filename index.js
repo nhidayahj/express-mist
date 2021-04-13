@@ -33,6 +33,15 @@ app.use(session({
     'saveUninitialized':true
 }))
 
+const csrfInstance = csrf();
+app.use(function(req,res,next) {
+    if (req.url.slice(0,5) == '/api/') {
+        return next()
+    } else {
+        csrfInstance(req,res,next)
+    }
+})
+
 app.use(flash());
 app.use(function (req,res,next) {
     res.locals.success_messages = req.flash("success_messages");
@@ -49,10 +58,11 @@ app.use(function (req,res, next) {
     next();
 })
 
-app.use(csrf());
-app.use(function(req,res,next) {
-    res.locals.csrfToken = req.csrfToken();
-    next();
+app.use(function (req, res, next) {
+    if (req.csrfToken) {
+        res.locals.csrfToken = req.csrfToken();
+    } 
+    next()
 })
 
 // import in routes 
@@ -62,7 +72,10 @@ const oilsRoute = require('./routes/oils');
 const userRoute = require('./routes/users');
 
 const api = {
-    'members':require('./routes/api/members')
+    'diffusers':require('./routes/api/diffusers'),
+    'oils':require('./routes/api/oils'),
+    'members':require('./routes/api/members'),
+    'cartItems':require('./routes/api/cartItems')
 }
 
 async function main() {
@@ -71,7 +84,10 @@ async function main() {
     app.use('/diffusers', diffuserRoute);
     app.use('/oils', oilsRoute);
     app.use('/users', userRoute);
+    app.use('/api/diffusers', express.json(), api.diffusers)
+    app.use('/api/oils', express.json(), api.oils)
     app.use('/api/members', express.json(), api.members)
+    app.use('/api/shoppingCart', express.json(), api.cartItems)
 }
 
 main();

@@ -77,7 +77,7 @@ const registerUserForm = (role) => {
     })
 }
 
-const vendorLoginForm = (role) => {
+const vendorLoginForm = () => {
     return forms.create({
         'email': fields.string({
             'label':'Email',
@@ -87,32 +87,6 @@ const vendorLoginForm = (role) => {
                 label: ['form-label', 'text-primary']
             },
             'validators': [validators.email()]
-        }),
-        'username': fields.string({
-            'label':'Username',
-            'required': true,
-            'errorAfterField': true,
-            'cssClasses': {
-                label: ['form-label', 'text-primary']
-            }
-        }),
-        'workId': fields.string({
-            'label': 'Staff Identification No.',
-            'required':true, 
-            'errorAfterField':true,
-            'cssClasses':{
-                 label: ['form-label', 'text-primary']
-            }
-        }),
-        'role_id': fields.string({
-            'label':'Profile',
-            'required':true, 
-            'errorAfterField':true,
-            'cssClasses':{
-                 label: ['form-label', 'text-primary']
-            },
-            'widget':widgets.select(role),
-            'choices':role
         }),
         'password': fields.password({
             'required':true, 

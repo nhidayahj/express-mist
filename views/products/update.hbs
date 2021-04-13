@@ -48,14 +48,26 @@
     if (product === "diffuser") {
         console.log("update post for diffuser");
         document.querySelector("#update_btn").addEventListener('click', function () {
-            document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value
+            if(document.querySelector("#upload_img").value !== document.querySelector("#id_image_url").value && 
+            document.querySelector("#upload_img").value !== "")   {
+                 document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value
+            } 
+            else {
+                  document.querySelector("#id_image_url").value = document.querySelector("#id_image_url").value;
+            }
         })
     }
 
     if (product === "oil") {
         console.log("update post for oil");
         document.querySelector("#update_btn").addEventListener("click", function () {
-            document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value;
+            if(document.querySelector("#upload_img").value !== document.querySelector("#id_image_url").value && 
+            document.querySelector("#upload_img").value !== "")   {
+                 document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value
+            } 
+            else {
+                  document.querySelector("#id_image_url").value = document.querySelector("#id_image_url").value;
+            }
         })
     }
 
