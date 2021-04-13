@@ -97,7 +97,7 @@ const createProductForm = (categories, tags) => {
 const createOilForm = (sizes, tags) => {
     return forms.create({
         'name':fields.string({
-            label:'Product Name',
+            label:'Product Name (Product Size)',
             required:true,
             errorAfterField:true, 
             cssClasses: {
@@ -138,7 +138,7 @@ const createOilForm = (sizes, tags) => {
             cssClasses: {
                 label:['form-label', 'text-primary'],
             }, 
-            widget:widgets.multipleSelect(sizes),
+            widget:widgets.select(sizes),
             choices:sizes
         }),
         'tags':fields.string({

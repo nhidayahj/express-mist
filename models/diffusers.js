@@ -63,6 +63,16 @@ const Oil_Tag = bookshelf.model('Oil_Tag',{
     }
 })
 
+const OilCartItem = bookshelf.model('OilCartItem', {
+    tableName:'oil_cart_items',
+    oils() {
+        return this.belongsTo('Oils')
+    },
+    customers() {
+        return this.belongsTo('Member')
+    }
+})
+
 // User here refers to the Vendors
 const User = bookshelf.model('User', {
     tableName:'users_vendors',
@@ -86,5 +96,5 @@ const Member = bookshelf.model('Member', {
 
 
 module.exports = {Diffuser, Diffuser_Category, Diffuser_Tag, DiffuserCartItem, 
-                    Oils, Sizes, Oil_Tag, 
+                    Oils, Sizes, Oil_Tag,OilCartItem, 
                     User, Member, Role}

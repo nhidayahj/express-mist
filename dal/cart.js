@@ -1,6 +1,6 @@
 // this cart DAL will contain both diffusers & oils function
 
-const {DiffuserCartItem, Member} = require('../models/diffusers')
+const {DiffuserCartItem, OilCartItem, Member} = require('../models/diffusers')
 
 
 const getMemberById = async (memberId) => {
@@ -13,14 +13,24 @@ const getMemberById = async (memberId) => {
 }
 
 
-const getAllDiffusers = async (memberId) => {
+const getAllDiffusers = async (customerId) => {
     const allDiffusers = await DiffuserCartItem.collection().where({
-        'customer_id':memberId
+        'customer_id':customerId
     }).fetch({
         require:false,
         withRelated:['diffusers']
     })
     return allDiffusers;
+}
+
+const getAllOils = async(customerId) => {
+    const allOils =  await OilCartItem.collection().where({
+        'customer_id':customerId
+    }).fetch({
+        require:false,
+        withRelated:['oils']
+    });
+    return allOils;
 }
 
 const getDiffuserByUserAndDiffuserId = async(userId, diffuserId) => {
@@ -32,6 +42,17 @@ const getDiffuserByUserAndDiffuserId = async(userId, diffuserId) => {
         withRelated:['diffusers']
     })
     return diffuser;
+}
+
+const getOilByUserAndOilId = async(userId, oilId) => {
+    const oil = await OilCartItem.where({
+        'customer_id':userId,
+        'oil_id':oilId
+    }).fetch({
+        require:false,
+        withRelated:['oils']
+    });
+    return oil;
 }
 
 const removeDiffuser = async(userId, diffuserId) => {
@@ -49,4 +70,5 @@ const removeDiffuser = async(userId, diffuserId) => {
 
 
 module.exports = {getMemberById, getAllDiffusers, 
-                getDiffuserByUserAndDiffuserId, removeDiffuser}
+                getDiffuserByUserAndDiffuserId, removeDiffuser,
+                getAllOils, getOilByUserAndOilId}
