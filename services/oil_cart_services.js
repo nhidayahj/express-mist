@@ -26,6 +26,16 @@ class OilCartServices {
             return oilCartItem;
         }
     }
+
+    async oilUpdateQuantity(oilId, newQuantity) {
+        return await cartDataLayer.updateOilQuantity(
+            this.user_id, oilId, newQuantity);
+        
+    }
+
+    async removeOil(oilId){
+        return await cartDataLayer.removeOil(this.user_id,oilId);
+    }
 }
 
 module.exports = OilCartServices;

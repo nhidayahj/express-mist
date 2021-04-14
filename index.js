@@ -72,8 +72,9 @@ const oilsRoute = require('./routes/oils');
 const userRoute = require('./routes/users');
 
 const api = {
-    'diffusers':require('./routes/api/diffusers'),
-    'oils':require('./routes/api/oils'),
+    // 'diffusers':require('./routes/api/diffusers'),
+    // 'oils':require('./routes/api/oils'),
+    'products':require('./routes/api/products'),
     'members':require('./routes/api/members'),
     'cartItems':require('./routes/api/cartItems')
 }
@@ -84,8 +85,9 @@ async function main() {
     app.use('/diffusers', diffuserRoute);
     app.use('/oils', oilsRoute);
     app.use('/users', userRoute);
-    app.use('/api/diffusers', express.json(), api.diffusers)
-    app.use('/api/oils', express.json(), api.oils)
+    // app.use('/api/diffusers', express.json(), api.diffusers)
+    // app.use('/api/oils', express.json(), api.oils)
+    app.use('/api/products', express.json(), api.products)
     app.use('/api/members', express.json(), api.members)
     app.use('/api/shoppingCart', express.json(), api.cartItems)
 }

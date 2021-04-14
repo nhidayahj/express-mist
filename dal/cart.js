@@ -55,6 +55,34 @@ const getOilByUserAndOilId = async(userId, oilId) => {
     return oil;
 }
 
+const updateDiffuserQuantity = async(userId, diffuserId, newQuantity) => {
+    const diffuser = await getDiffuserByUserAndDiffuserId(userId, diffuserId);
+    if (diffuser) {
+        if(newQuantity > 0) {
+            diffuser.set('quantity', newQuantity);
+            await diffuser.save();
+            return diffuser;
+        } else {
+            removeDiffuser(userId, diffuserId)
+        }
+    }
+    return null;
+}
+
+const updateOilQuantity = async(userId, oilId, newQuantity) => {
+    const oil = await getOilByUserAndOilId(userId, oilId);
+    if (oil) {
+        if(newQuantity > 0) {
+            oil.set('quantity', newQuantity);
+            await oil.save();
+            return oil;
+        } else {
+            removeOil(userId, oilId)
+        }
+    }
+    return null;
+}
+
 const removeDiffuser = async(userId, diffuserId) => {
     const diffuser = await getDiffuserByUserAndDiffuserId(userId, diffuserId);
     if (diffuser) {
@@ -62,13 +90,17 @@ const removeDiffuser = async(userId, diffuserId) => {
         return true;
     }
     return false;
-
 }
 
-// allow customer to update quantity
-
-
+const removeOil = async(userId, oilId) => {
+    const oil = await getOilByUserAndOilId(userId, oilId);
+    if (oil) {
+        oil.destroy();
+        return true;
+    }
+    return false;
+}
 
 module.exports = {getMemberById, getAllDiffusers, 
-                getDiffuserByUserAndDiffuserId, removeDiffuser,
-                getAllOils, getOilByUserAndOilId}
+                getDiffuserByUserAndDiffuserId, updateDiffuserQuantity, removeDiffuser,
+                getAllOils, getOilByUserAndOilId,updateOilQuantity, removeOil}

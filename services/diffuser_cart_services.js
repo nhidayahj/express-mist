@@ -32,6 +32,12 @@ class DiffuserCartServices {
 
     }
 
+    async diffuserUpdateQuantity(diffuserId, newQuantity) {
+        return await cartDataLayer.updateDiffuserQuantity(
+            this.user_id, diffuserId, newQuantity);
+        
+    }
+
     async removeDiffuserItem(diffuserId){
         return await cartDataLayer.removeDiffuser(this.user_id,diffuserId);
     }
