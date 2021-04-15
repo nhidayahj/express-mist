@@ -40,7 +40,7 @@ router.post('/register', async(req,res) => {
             await newVendor.save();
 
             req.flash("success_message", `New user: ${newVendor.get('email')} successfully added.`)
-            res.redirect('/users');
+            res.redirect('/');
         }, 
         'error': (form) => {
             res.render('users/signup', {
@@ -88,7 +88,7 @@ router.post('/login', async(req,res) => {
                     }
                     console.log(req.session.user)
                     req.flash("success_messages", `Welcome back, ${req.session.user.username}`);
-                    res.redirect("/users");
+                    res.redirect("/");
                 } else {
                     req.flash("error_messages", "Login details does not exists. Please try again.");
                     res.redirect('/users/login')
@@ -106,7 +106,7 @@ router.post('/login', async(req,res) => {
 router.get('/logout', async(req,res) => {
     req.session.user = null;
     req.flash('success_messages', 'Successfully logged out.');
-    res.redirect('/users')
+    res.redirect('/')
 })
 
 

@@ -18,10 +18,12 @@ const getCustomer = async(customerId) => {
     const customer = await Member.where({
         'id':customerId
     }).fetch({
-        require:false
+        require:true,
     });
     return customer;
 }
+
+
 
 
 module.exports = {getAllRoles, getAllVendors, getCustomer}

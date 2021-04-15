@@ -91,10 +91,15 @@ const Role = bookshelf.model('Role', {
 
 
 const Member = bookshelf.model('Member', {
-    tableName:'users_customers'
+    tableName:'users_customers',
+    
+})
+
+const Orders = bookshelf.model('Orders', {
+    tableName:'ship_orders'
 })
 
 
 module.exports = {Diffuser, Diffuser_Category, Diffuser_Tag, DiffuserCartItem, 
                     Oils, Sizes, Oil_Tag,OilCartItem, 
-                    User, Member, Role}
+                    User, Role, Member, Orders}

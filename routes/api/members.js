@@ -22,17 +22,17 @@ const getHashedPassword = (password) => {
     return hash;
 }
 
+// register new customer/member
 // router.post('/register', async(req,res) => {
 //     let name = req.body.name;
 //     let email = req.body.email;
 //     let dob = req.body.dob
+//     let member_date =
 
 //     res.send({
 
 //     })
 // })
-
-
 
 router.post('/login', async(req,res) => {
     let vendor = await User.where({

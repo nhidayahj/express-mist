@@ -69,14 +69,17 @@ app.use(function (req, res, next) {
 const landingRoute = require('./routes/landing');
 const diffuserRoute = require('./routes/diffuser');
 const oilsRoute = require('./routes/oils');
-const userRoute = require('./routes/users');
+const vendorRoute = require('./routes/vendor');
+
 
 const api = {
     // 'diffusers':require('./routes/api/diffusers'),
     // 'oils':require('./routes/api/oils'),
     'products':require('./routes/api/products'),
     'members':require('./routes/api/members'),
-    'cartItems':require('./routes/api/cartItems')
+    'cartItems':require('./routes/api/cartItems'),
+    'orders':require('./routes/api/custShipAddress'),
+    'checkout':require('./routes/api/checkout'),
 }
 
 async function main() {
@@ -84,12 +87,12 @@ async function main() {
     app.use('/', landingRoute);
     app.use('/diffusers', diffuserRoute);
     app.use('/oils', oilsRoute);
-    app.use('/users', userRoute);
-    // app.use('/api/diffusers', express.json(), api.diffusers)
-    // app.use('/api/oils', express.json(), api.oils)
-    app.use('/api/products', express.json(), api.products)
+    app.use('/vendor', vendorRoute);
     app.use('/api/members', express.json(), api.members)
+    app.use('/api/products', express.json(), api.products)
     app.use('/api/shoppingCart', express.json(), api.cartItems)
+    app.use('/api/shipping', express.json(), api.orders)
+    app.use('/api/checkout', express.json(), api.checkout)
 }
 
 main();
