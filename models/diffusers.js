@@ -99,7 +99,21 @@ const Orders = bookshelf.model('Orders', {
     tableName:'ship_orders'
 })
 
+const Order_Diffuser = bookshelf.model('Order_Diffuser', {
+    tableName:'orders_diffusers',
+    orders() {
+        return this.belongsTo('Orders')
+    }
+})
+
+const Order_Oil = bookshelf.model('Order_Oil', {
+    tableName:'orders_oils', 
+    orders() {
+        return this.belongsTo('Orders')
+    }
+})
+
 
 module.exports = {Diffuser, Diffuser_Category, Diffuser_Tag, DiffuserCartItem, 
                     Oils, Sizes, Oil_Tag,OilCartItem, 
-                    User, Role, Member, Orders}
+                    User, Role, Member, Orders, Order_Diffuser, Order_Oil}

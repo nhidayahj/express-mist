@@ -11,7 +11,9 @@ const OilCartServices = require('../../services/oil_cart_services');
 router.get('/:customer_id', async(req,res)=>{
 
     try {
+        // checks if customer is registered
         let customer = await userDataLayer.getCustomer(req.params.customer_id);
+        // then takes the customer's id
         let allDiffusers = await cartDataLayer.getAllDiffusers(customer.get('id'));
         let allOils = await cartDataLayer.getAllOils(customer.get('id'));
         res.status(200);
@@ -31,7 +33,10 @@ router.get('/:customer_id', async(req,res)=>{
 // customer to add diffuser into their own shopping cart
 router.get('/diffuser/:customer_id/:diffuser_id/addtocart', async(req,res) => {
     try {
-        let cartService = new DiffuserCartServices(req.params.customer_id);
+        // checks if customer is registered
+        let customer = await userDataLayer.getCustomer(req.params.customer_id);
+        // then takes the customer's id
+        let cartService = new DiffuserCartServices(customer.get('id'));
         await cartService.diffuserAddToCart(req.params.diffuser_id);
         
         res.status(200);
@@ -44,7 +49,7 @@ router.get('/diffuser/:customer_id/:diffuser_id/addtocart', async(req,res) => {
     } catch (e) {
         res.status(404);
         res.send({
-            'error':"Trouble adding diffuser to cart."
+            'error':"Trouble adding diffuser to cart. Either customer or product not found"
         });
         console.log(e)
     }
@@ -52,7 +57,10 @@ router.get('/diffuser/:customer_id/:diffuser_id/addtocart', async(req,res) => {
 
 router.get('/diffuser/:customer_id/:diffuser_id/:newQuantity/update', async(req,res) => {
     try {
-        let cartServices = new DiffuserCartServices(req.params.customer_id);
+        // checks if customer is registered
+        let customer = await userDataLayer.getCustomer(req.params.customer_id);
+        // then takes the customer's id
+        let cartServices = new DiffuserCartServices(customer.get('id'));
         await cartServices.diffuserUpdateQuantity(req.params.diffuser_id, req.params.newQuantity);
         res.status(200);
         res.send("Diffuser quantity has been updated")
@@ -83,7 +91,10 @@ router.get('/diffuser/:customer_id/:diffuser_id/remove', async(req,res) => {
 // customer to add oil into their cart
 router.get('/oil/:customer_id/:oil_id/addtocart', async(req,res) => {
     try {
-        let cartServices = new OilCartServices(req.params.customer_id);
+        // checks if customer is registered
+        let customer = await userDataLayer.getCustomer(req.params.customer_id);
+        // then takes the customer's id
+        let cartServices = new OilCartServices(customer.get('id'));
         await cartServices.addOilToCart(req.params.oil_id);
         res.status(200);
         res.send({
@@ -103,7 +114,10 @@ router.get('/oil/:customer_id/:oil_id/addtocart', async(req,res) => {
 
 router.get('/oil/:customer_id/:oil_id/:newQuantity/update', async(req,res) => {
     try {
-        let cartServices = new OilCartServices(req.params.customer_id);
+        // checks if customer is registered
+        let customer = await userDataLayer.getCustomer(req.params.customer_id);
+        // then takes the customer's id
+        let cartServices = new OilCartServices(customer.get('id'));
         await cartServices.oilUpdateQuantity(req.params.oil_id, req.params.newQuantity);
         res.status(200);
         res.send("Oil quantity has been updated")
