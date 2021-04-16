@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const bodyParser = require('body-parser');
 
 const { Orders, Order_Diffuser, Order_Oil } = require('../../models/diffusers');
 const diffuserCartServices = require('../../services/diffuser_cart_services');
@@ -36,7 +37,7 @@ router.get('/:customer_id', async (req, res) => {
 router.get('/:customer_id/latest/orders', async (req, res) => {
     // to include oil items as well
     try {
-        let custLatestOrder = await orderDataLayer.getOrdersByCustomerId(req.params.customer_id);
+        let custLatestOrder = await orderDataLayer.getLatestOrdersByCustomerId(req.params.customer_id);
         res.status(200);
         res.send(custLatestOrder)
     } catch (e) {
@@ -71,11 +72,12 @@ router.post('/:customer_id/latest/orders', async (req, res) => {
 
 // create an instance of all diffuser/oil products from customers' cart
 // for vendor to see what product is needed
+// this is to proceed right before Stripe checkout
 router.get('/:customer_id/orders', async (req, res) => {
     try {
         let allCustDiffusers = await cartDataLayer.getAllDiffusers(req.params.customer_id);
         let allCustOils = await cartDataLayer.getAllOils(req.params.customer_id);
-        let orderItemByCustomer = await orderDataLayer.getOrdersByCustomerId(req.params.customer_id);
+        let orderItemByCustomer = await orderDataLayer.getLatestOrdersByCustomerId(req.params.customer_id);
         
         if (orderItemByCustomer) {
             console.log("CUstomer exists")
@@ -114,7 +116,7 @@ router.get('/:customer_id/orders', async (req, res) => {
 // last stage to redirect to Stripes'
 // this route will show the Stripes checkout page
 // see parallel lab: link checkout/checkout
-router.get('/confirm', async (req, res) => {
+router.get('/:customer_id/confirm', async (req, res) => {
     let allDiffusers, allOils;
     const customer = await customerDataLayer.getCustomer(req.params.customer_id);
     const diffuserService = new diffuserCartServices(customer.get('id'));
@@ -122,10 +124,10 @@ router.get('/confirm', async (req, res) => {
     const oilService = new oilCartServices(customer.get('id'));
     allOils = await oilService.getAllOils()
 
-    res.send({
-        "diffuserItems": allDiffusers,
-        "oilItems": allOils
-    })
+    // res.send({
+    //     "diffuserItems": allDiffusers,
+    //     "oilItems": allOils
+    // })
 
     let lineItems = [];
     let meta = [];
@@ -185,13 +187,47 @@ router.get('/confirm', async (req, res) => {
         'success_url': process.env.STRIPE_SUCCESS_URL + '?sessionId={CHECKOUT_SESSION_ID}',
         'cancel_url': process.env.STRIPE_ERROR_URL,
         'metadata': {
-            'orders': metaData
+            'orders': metaJSON
         }
 
     }
 
+    let stripeSession = await stripe.checkout.sessions.create(payment);
+
+    res.render('checkout/checkout', {
+        'sessionId':stripeSession.id,
+        'publishableKey':process.env.STRIPE_PUBLISHABLE_KEY
+    })
+
 })
 
+router.post('/process_payment', bodyParser.raw({type:'application/json'}), 
+    async(req,res) => {
+    let payload = req.body;
+    
+    let endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
+    let signHeader = req.headers['stripe-signature'];
+    let event; 
+    try {
+        event = stripe.webhooks.constructEvent(payload, signHeader, endpointSecret);
+    } catch (e) {
+        res.send({
+            'error':e.message
+        });
+        console.log(e.message)
+    }
+    if(event.type == 'invoice.payment_succeeded') {
+        console.log("Payment successfull: ",event.data.object);
+    }
+    // there is alot of events the Stripe webhook will trigger 
+    console.log("Stripe events:" ,event.type)
+    if (event.type == 'checkout.session.completed'){
+        // here you put in your transaction data (customizing UI) 
+        // when there is complete transaction
+        console.log("Stripe info: " ,event.data.object)
+    }
+    res.sendStatus(200)
+})
 
 
 

@@ -35,7 +35,7 @@ app.use(session({
 
 const csrfInstance = csrf();
 app.use(function(req,res,next) {
-    if (req.url.slice(0,5) == '/api/') {
+    if (req.url.slice(0,5) == '/api/' || req.url === '/checkout/process_payment' ) {
         return next()
     } else {
         csrfInstance(req,res,next)
@@ -70,6 +70,7 @@ const landingRoute = require('./routes/landing');
 const diffuserRoute = require('./routes/diffuser');
 const oilsRoute = require('./routes/oils');
 const vendorRoute = require('./routes/vendor');
+const orderRoute = require('./routes/orders');
 
 
 const api = {
@@ -88,11 +89,12 @@ async function main() {
     app.use('/diffusers', diffuserRoute);
     app.use('/oils', oilsRoute);
     app.use('/vendor', vendorRoute);
+    app.use('/orders', orderRoute);
     app.use('/api/members', express.json(), api.members)
     app.use('/api/products', express.json(), api.products)
     app.use('/api/shoppingCart', express.json(), api.cartItems)
     app.use('/api/shipping', express.json(), api.orders)
-    app.use('/api/checkout', express.json(), api.checkout)
+    app.use('/api/checkout', api.checkout)
 }
 
 main();

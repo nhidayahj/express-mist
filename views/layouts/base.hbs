@@ -9,19 +9,19 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="/style.css">
+    {{!-- <link rel="stylesheet" href="/style.css"> --}}
     <title>{{#block 'title'}}{{/block}}</title>
 </head>
 
 <body>
-    <div class="sidenav">
+    {{!-- <div class="sidenav">
         <a href="/">Home</a>
         <a href="/diffusers">Diffusers</a>
         <a href="/oils">Essential Oil</a>
-        <a href="#">Orders</a>
-    </div>
+        <a href="/orders">Orders</a>
+    </div> --}}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="/">Products</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -29,10 +29,16 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Dasboard <span class="sr-only">(current)</span></a>
+               
+                <li class="nav-item">
+                    <a class="nav-link" href="/diffusers">Diffusers <span class="sr-only">(current)</span></a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="/oils">Essential Oil <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/orders">Orders <span class="sr-only">(current)</span></a>
+                </li>
             </ul>
             <div>
                 {{#if user}}
@@ -50,7 +56,7 @@
         </div>
     </nav>
 
-    <section class="container">
+    <div class="container">
         {{#if success_messages}}
         {{#each success_messages}}
         <div class="alert alert-success">{{this}}</div>
@@ -64,7 +70,7 @@
         {{/if}}
 
         {{#block 'content'}}{{/block}}
-    </section>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

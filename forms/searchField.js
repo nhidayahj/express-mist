@@ -4,7 +4,8 @@ const fields = forms.fields;
 const validators = forms.validators;
 const widgets = forms.widgets;
 
-/*
+const ordersDataLayer = require('../dal/orders');
+
 var bootstrapField = function (name, object){
     if (!Array.isArray(object.widget.classes)) { object.widget.classes = []; }
 
@@ -25,6 +26,7 @@ var bootstrapField = function (name, object){
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
+/*
 const searchFields = (sizes, tags) => {
     return forms.create({
         'name':fields.string({
@@ -77,8 +79,21 @@ const searchFields = (sizes, tags) => {
 }
 */
 
-const searchFields = (product) => [
-    
-]
+const searchFields = (product) => {
 
-module.exports = {bootstrapField, searchFields}
+}
+
+const orderFields = () => {
+    return forms.create({
+        'name':fields.string({
+            label:'CustomerName',
+            required:false,
+            errorAfterField:false, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }
+        })
+    })
+}
+
+module.exports = {bootstrapField, searchFields,orderFields}

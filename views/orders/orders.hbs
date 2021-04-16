@@ -1,0 +1,45 @@
+{{#extends 'base'}}
+{{#block 'title'}}Aroma Mister - Product Orders Table{{/block}}
+
+{{#block 'content'}}
+
+
+<div>
+    <div class="">
+        <h2>Diffusers Order Table</h2>
+    </div>
+
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                
+                <th scope="col">Product Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Customer Name</th>
+                <th scope="col">Payment Status</th>
+                <th scope="col">Order Id</th>
+                <th scope="col">Order Status</th>
+                <th scope="col">Order Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each order}}
+            <tr>
+                
+                <td>{{this.diffuser.diffuser_name}}</td>
+                <td>{{this.quantity}}</td>
+                <td>{{this.orders.customers.name}}</td>
+                <td>{{this.orders.payment_status}}</td>
+                <td>{{this.orders.id}}</td>
+                <td>{{this.orders.order_status}}</td>
+                <td>{{this.orders.order_date}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+{{/block}}
+
+
+{{/extends}}

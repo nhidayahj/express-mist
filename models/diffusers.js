@@ -92,24 +92,36 @@ const Role = bookshelf.model('Role', {
 
 const Member = bookshelf.model('Member', {
     tableName:'users_customers',
+    orders() {
+        return this.belongsTo('Orders', 'order_id')
+    }
     
 })
 
 const Orders = bookshelf.model('Orders', {
-    tableName:'ship_orders'
+    tableName:'ship_orders', 
+    customers() {
+        return this.belongsTo('Member','customer_id')
+    }
 })
 
 const Order_Diffuser = bookshelf.model('Order_Diffuser', {
     tableName:'orders_diffusers',
     orders() {
-        return this.belongsTo('Orders')
+        return this.belongsTo('Orders', 'order_id')
+    },
+    diffuser() {
+        return this.belongsTo('Diffuser', 'diffuser_id')
     }
 })
 
 const Order_Oil = bookshelf.model('Order_Oil', {
     tableName:'orders_oils', 
     orders() {
-        return this.belongsTo('Orders')
+        return this.belongsTo('Orders', 'order_id')
+    },
+    oil() {
+        return this.belongsTo('Oil','oil_id')
     }
 })
 
