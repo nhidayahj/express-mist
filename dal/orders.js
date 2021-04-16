@@ -10,7 +10,8 @@ const getCustomerById = async (customerId) => {
     const customer = await Member.where({
         'id':customerId
     }).fetch({
-        require:false
+        require:true,
+        withRelated:['orders']
     })
     return customer;
 }
@@ -18,10 +19,11 @@ const getCustomerById = async (customerId) => {
 const getAllOrdersByCustomerId = async(customerId) => {
     const order = await getCustomerById(customerId);
     if(order) {
-        const customerOrders = await Order.where({
+        const customerOrders = await Orders.where({
             'customer_id':customerId
         }).fetch({
             require:false,
+            withRelated:['customers']
         })
         return customerOrders;
     }
@@ -33,10 +35,12 @@ const getLatestOrdersByCustomerId = async(customerId) => {
     }).query(function(order){
         order.orderBy('id', 'DESC').limit(1)
     }).fetch({
-        require:true, 
+        require:true,
+        withRelated:['customers'] 
     })
 }
 
 
 
-module.exports = {getAllCustomers, getAllOrdersByCustomerId, getLatestOrdersByCustomerId}
+module.exports = {getAllCustomers, getCustomerById,
+    getAllOrdersByCustomerId, getLatestOrdersByCustomerId}

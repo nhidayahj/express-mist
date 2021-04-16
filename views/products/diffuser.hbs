@@ -4,13 +4,13 @@
 
 {{#block 'content'}}
 
-<div>
-    <div class="">
-        <h2>Diffuser products</h2>
-        <a href="/diffusers/create" class="btn btn-info btn-sm mt-4 mb-4">Add Stock</a>
-    </div>
+<div class="container-fluid">
+    <h2>Diffuser products</h2>
+    <a href="/diffusers/create" class="btn btn-info btn-sm mt-4 mb-4">Add Stock</a>
 
-    <table class="table" >
+
+
+    <table class="table">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">SKU</th>
@@ -18,7 +18,7 @@
                 <th scope="col">Product Name</th>
                 <th scope="col">Category</th>
                 <th scope="col">Tags</th>
-                <th scope="col">Price (in cents)</th>
+                <th scope="col">Price (SGD)</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Stock Actions</th>
 
@@ -39,8 +39,9 @@
                     <a href="/diffusers/{{this.id}}/update">{{this.diffuser_name}}</a>
                 </td>
                 <td>{{this.category.name}}</td>
-                <td>{{#each this.tags}}<span class="tags-badge badge badge-pill badge-info ml-2">{{this.name}}</span>{{/each}}</td>
-                <td>{{this.cost}}</td>
+                <td>{{#each this.tags}}<span
+                        class="tags-badge badge badge-pill badge-info ml-2">{{this.name}}</span>{{/each}}</td>
+                <td class="sgd">{{this.cost}}</td>
                 <td>{{this.stock}}</td>
                 <td>
                     <a href="/diffusers/{{this.id}}/update" class="btn btn-warning btn-sm ml-2">Update</a>
@@ -53,8 +54,16 @@
 </div>
 {{/block}}
 
-
-
+{{#block 'js'}}
+<script>
+    let priceCurr = document.getElementsByClassName("sgd");
+    for (let price of priceCurr) {
+        console.log((price))
+        let newPrice = (parseFloat(price.innerHTML) / 100.00).toFixed(2)
+        price.innerHTML = newPrice
+    }
+</script>
+{{/block}}
 
 
 {{/extends}}

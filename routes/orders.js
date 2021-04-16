@@ -4,9 +4,10 @@ const router = express.Router();
 
 const {Orders, Order_Diffuser, Order_Oil} = require('../models/diffusers')
 
-const ordersDataLayer = require('../dal/orders')
+const cartDataLayer = require('../dal/cart')
+const ordersDataLayer = require('../dal/orders');
 const {bootstrapField, orderFields} = require('../forms/searchField')
-
+const {checkIfAuthenticated} = require('../middleware')
 
 router.get('/', async(req,res) => {
     const orderFormFields = orderFields();
@@ -29,6 +30,15 @@ router.get('/', async(req,res) => {
 
 })
 
+// get indv customer order details
+router.get('/customer/:customer_id/order', checkIfAuthenticated,async(req,res) => {
+    const customer = await ordersDataLayer.getLatestOrdersByCustomerId(req.params.customer_id)
+    // res.send(customer.toJSON());
+    console.log(customer.toJSON())
+    res.render("orders/customerOrders", {
+        'customer':customer.toJSON()
+    })
+})
 
 
 module.exports = router;

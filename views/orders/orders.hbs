@@ -4,20 +4,20 @@
 {{#block 'content'}}
 
 
-<div>
-    <div class="">
+
+<div class="container-fluid">
+    <div class="mt-4">
         <h2>Diffusers Order Table</h2>
     </div>
-
-    <table class="table">
+    <table class="table mt-4">
         <thead class="thead-dark">
             <tr>
-                
+
+                <th scope="col">Order Id</th>
                 <th scope="col">Product Name</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Customer Name</th>
                 <th scope="col">Payment Status</th>
-                <th scope="col">Order Id</th>
                 <th scope="col">Order Status</th>
                 <th scope="col">Order Date</th>
             </tr>
@@ -25,14 +25,16 @@
         <tbody>
             {{#each order}}
             <tr>
-                
+
+                <td>{{this.orders.id}}</td>
                 <td>{{this.diffuser.diffuser_name}}</td>
                 <td>{{this.quantity}}</td>
-                <td>{{this.orders.customers.name}}</td>
+                <td>
+                    <a href="orders/customer/{{this.orders.customers.id}}/order">{{this.orders.customers.name}}</a>
+                </td>
                 <td>{{this.orders.payment_status}}</td>
-                <td>{{this.orders.id}}</td>
                 <td>{{this.orders.order_status}}</td>
-                <td>{{this.orders.order_date}}</td>
+                <td class="date">{{this.orders.order_date}}</td>
             </tr>
             {{/each}}
         </tbody>
@@ -41,5 +43,14 @@
 
 {{/block}}
 
+{{#block 'js'}}
+<script>
+    let formatDate = document.getElementsByClassName("date")
+    {{!-- console.log(formatDate) --}}
+    for (let date of formatDate) {
+        date.innerHTML = date.innerHTML.slice(0, 16)
+    }
+</script>
 
+{{/block}}
 {{/extends}}

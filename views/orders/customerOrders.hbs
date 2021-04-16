@@ -1,0 +1,23 @@
+{{#extends 'base'}}
+{{#block 'title'}}Aroma Misty - Customer Details{{/block}}
+
+{{#block 'content'}}
+<div class="container">
+    <h3>Customer Order Id: #{{customer.id}}</h3>
+    <ul>
+        <li>Customer Name: {{customer.customers.name}}</li>
+        <li>Customer Email: {{customer.customers.email}}</li>
+        <li>Customer Mobile No.: +65 {{customer.customers.mobile_no}}</li>
+        <li>Customer Shipping Address.: {{customer.street_name}} S({{customer.postal_code}}) #{{customer.unit_code}}</li>
+        <li>Customer Mobile No.: +65 {{customer.customers.mobile_no}}</li>
+    </ul>
+    <h3>Customer Order Details</h3>
+    <ul>
+        <li>Ordered Date: {{customer.order_date}}</li>
+    </ul>
+</div>
+
+
+{{/block}}
+
+{{/extends}}

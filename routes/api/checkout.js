@@ -72,6 +72,7 @@ router.post('/:customer_id/latest/orders', async (req, res) => {
 
 // create an instance of all diffuser/oil products from customers' cart
 // for vendor to see what product is needed
+// and therefore order table in vendor's hbs is updated 
 // this is to proceed right before Stripe checkout
 router.get('/:customer_id/orders', async (req, res) => {
     try {
@@ -103,6 +104,7 @@ router.get('/:customer_id/orders', async (req, res) => {
                 };
             }
             res.status(200);
+            console.log(allCustDiffusers.toJSON(), allCustOils.toJSON())
             res.send("OK")
         }
     } catch (e) {
