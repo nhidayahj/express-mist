@@ -121,7 +121,7 @@ const Order_Oil = bookshelf.model('Order_Oil', {
         return this.belongsTo('Orders', 'order_id')
     },
     oil() {
-        return this.belongsTo('Oil','oil_id')
+        return this.belongsTo('Oils','oil_id')
     }
 })
 

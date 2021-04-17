@@ -1,4 +1,4 @@
-const {Orders, Member, Order_Diffuser, DiffuserCartItem} = require('../models/diffusers');
+const {Orders, Member, Order_Diffuser, Order_Oil, DiffuserCartItem} = require('../models/diffusers');
 
 const getAllCustomers = async() => {
     return await Member.collection().fetch({
@@ -16,19 +16,35 @@ const getCustomerById = async (customerId) => {
     return customer;
 }
 
-const getAllOrdersByCustomerId = async(customerId) => {
-    const order = await getCustomerById(customerId);
+const getAllOrderedDiffuserByCustomer = async(customerId, orderId) => {
+    const order = await getLatestOrdersByCustomerId(customerId);
     if(order) {
-        const customerOrders = await Orders.where({
-            'customer_id':customerId
+        const diffuserItems = await Order_Diffuser.collection().where({
+            'order_id':orderId
         }).fetch({
             require:false,
-            withRelated:['customers']
+            withRelated:['diffuser','orders']
         })
-        return customerOrders;
+        return diffuserItems;
     }
 }
 
+const getAllOrderedOilByCustomer = async(customerId, orderId) => {
+    const order = await getLatestOrdersByCustomerId(customerId);
+    if (order) {
+        const oilItems = await Order_Oil.collection().where({
+            'order_id':orderId
+        }).fetch({
+            require:false,
+            withRelated:['oil', 'orders']
+        })
+        return oilItems;
+    }
+}
+
+
+
+// latest order by the same customer
 const getLatestOrdersByCustomerId = async(customerId) => {
     return await Orders.where({
         'customer_id':customerId
@@ -43,4 +59,5 @@ const getLatestOrdersByCustomerId = async(customerId) => {
 
 
 module.exports = {getAllCustomers, getCustomerById,
-    getAllOrdersByCustomerId, getLatestOrdersByCustomerId}
+    getAllOrderedDiffuserByCustomer, getAllOrderedOilByCustomer,
+    getLatestOrdersByCustomerId}

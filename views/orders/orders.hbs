@@ -1,5 +1,5 @@
 {{#extends 'base'}}
-{{#block 'title'}}Aroma Mister - Product Orders Table{{/block}}
+{{#block 'title'}}Aroma Mister - Orders{{/block}}
 
 {{#block 'content'}}
 
@@ -13,9 +13,8 @@
         <thead class="thead-dark">
             <tr>
 
-                <th scope="col">Order Id</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Quantity</th>
+                <th scope="col">Order ID</th>
+
                 <th scope="col">Customer Name</th>
                 <th scope="col">Payment Status</th>
                 <th scope="col">Order Status</th>
@@ -23,14 +22,50 @@
             </tr>
         </thead>
         <tbody>
-            {{#each order}}
+            {{#each diffuser}}
             <tr>
 
-                <td>{{this.orders.id}}</td>
-                <td>{{this.diffuser.diffuser_name}}</td>
-                <td>{{this.quantity}}</td>
                 <td>
-                    <a href="orders/customer/{{this.orders.customers.id}}/order">{{this.orders.customers.name}}</a>
+                    <a href="orders/customerItems/{{this.orders.customers.id}}/{{this.orders.id}}">{{this.orders.id}}</a>
+                </td>
+
+                <td>
+                    <a href="orders/customerItems/{{this.orders.customers.id}}/{{this.orders.id}}">{{this.orders.customers.name}}</a>
+                </td>
+                <td>{{this.orders.payment_status}}</td>
+                <td>{{this.orders.order_status}}</td>
+                <td class="date">{{this.orders.order_date}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+
+<div class="container-fluid">
+    <div class="mt-4">
+        <h2>Oil Order Table</h2>
+    </div>
+    <table class="table mt-4">
+        <thead class="thead-dark">
+            <tr>
+
+                <th scope="col">Order ID</th>
+                <th scope="col">Customer Name</th>
+                <th scope="col">Payment Status</th>
+                <th scope="col">Order Status</th>
+                <th scope="col">Order Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {{#each oil}}
+                <td>
+                    <a href="orders/customerItems/{{this.orders.customers.id}}/{{this.orders.id}}">{{this.orders.id}}</a>
+                </td>
+
+                <td>
+                    <a href="orders/customerItems/{{this.orders.customers.id}}/{{this.orders.id}}">{{this.orders.customers.name}}</a>
                 </td>
                 <td>{{this.orders.payment_status}}</td>
                 <td>{{this.orders.order_status}}</td>
@@ -46,7 +81,7 @@
 {{#block 'js'}}
 <script>
     let formatDate = document.getElementsByClassName("date")
-    {{!-- console.log(formatDate) --}}
+    
     for (let date of formatDate) {
         date.innerHTML = date.innerHTML.slice(0, 16)
     }

@@ -48,7 +48,7 @@ router.get('/:customer_id/latest/orders', async (req, res) => {
 
 // when customer clicks on a decides to confirm the purchase
 // create an order instance for the vendor
-router.post('/:customer_id/latest/orders', async (req, res) => {
+router.post('/:customer_id/latest/orders', express.json(), async (req, res) => {
     let customerOrder = new Orders();
 
     let customer_id = req.params.customer_id;

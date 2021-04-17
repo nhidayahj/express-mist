@@ -8,16 +8,96 @@
         <li>Customer Name: {{customer.customers.name}}</li>
         <li>Customer Email: {{customer.customers.email}}</li>
         <li>Customer Mobile No.: +65 {{customer.customers.mobile_no}}</li>
-        <li>Customer Shipping Address.: {{customer.street_name}} S({{customer.postal_code}}) #{{customer.unit_code}}</li>
+        <li>Customer Shipping Address.: {{customer.street_name}} S({{customer.postal_code}}) #{{customer.unit_code}}
+        </li>
         <li>Customer Mobile No.: +65 {{customer.customers.mobile_no}}</li>
     </ul>
     <h3>Customer Order Details</h3>
     <ul>
         <li>Ordered Date: {{customer.order_date}}</li>
+        <li>Payment Status: {{customer.payment_status}}</li>
+        <li>Shipping Order Status: {{customer.order_status}}</li>
     </ul>
+    <h3>Ordered Items</h3>
+
+    <table class="table mt-4" id="diffuser-table">
+        <h3>Diffuser Items</h3>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Product Image</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each diffuser}}
+            <tr>
+                <td>
+                    <img src="{{this.diffuser.image_url}}" alt="product image" style="width:88px;height:95px"/>
+                </td>
+
+                <td>
+                    {{this.diffuser.diffuser_name}}
+                </td>
+                <td>{{this.quantity}}</td>
+                <td>{{this.diffuser.cost}}</td>
+
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <table class="table mt-4" id="oil-table">
+        <h3>Oil Items</h3>
+        <thead class="thead-dark">
+            <tr>
+
+                <th scope="col">Product Image</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Cost</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {{#each oil}}
+                <td>
+                    <img src="{{this.oil.image_url}}" alt="product image" style="width:88px;height:95px" />
+                </td>
+
+                <td>
+                    {{this.oil.name}}
+                </td>
+                <td>{{this.quantity}}</td>
+                <td>{{this.oil.cost}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
 </div>
 
 
+{{/block}}
+
+{{#block 'js'}}
+<script>
+    let diffuser = '{{diffuser}}'
+    console.log(diffuser)
+    {{!-- if (orderItemList.diffuserOrders > 0) {
+        document.querySelector("#diffuser-table").style.display = 'block'
+    } else {
+        document.querySelector("#diffuser-table").style.display = 'none'
+    } --}}
+
+    {{!-- if (orderItemList.oilOrders > 0) {
+        document.querySelector("#oil-table").style.display = 'block'
+    } else {
+        document.querySelector("#oil-table").style.display = 'none'
+    } --}}
+
+</script>
 {{/block}}
 
 {{/extends}}
