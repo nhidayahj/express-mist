@@ -223,9 +223,15 @@ router.post('/process_payment', bodyParser.raw({type:'application/json'}),
     if (event.type == 'checkout.session.completed'){
         // here you put in your transaction data (customizing UI) 
         // when there is complete transaction
-        console.log("Stripe info: " ,event.data.object);
-        let customerEmail = event.data.object.customer_details.email;
-        console.log(customerEmail);
+        const stripeInfo = event.data.object;
+        console.log("Stripe info: " ,stripeInfo);
+        let customerEmail = stripeInfo.customer_details.email;
+        const customerId = await orderDataLayer.getCustomerByEmail(customerEmail);
+        console.log(customerId.toJSON());
+        if(customerId) {
+            return await orderDataLayer
+                .updatePaymentOrderStatus(customerId.get('id'), stripeInfo.payment_status, stripeInfo.amount_total)
+        }
         // let ordersId = event.data.object.metadata.orders
         
         // const updateOrders = await orderDataLayer.getLatestOrdersByCustomerId()

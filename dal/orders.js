@@ -6,11 +6,11 @@ const getAllCustomers = async() => {
     })
 }
 
-const getCustomerById = async (customerId) => {
+const getCustomerByEmail = async (customerEmail) => {
     const customer = await Member.where({
-        'id':customerId
+        'email':customerEmail
     }).fetch({
-        require:true,
+        require:false,
         withRelated:['orders']
     })
     return customer;
@@ -56,15 +56,18 @@ const getLatestOrdersByCustomerId = async(customerId) => {
     })
 }
 
+const updatePaymentOrderStatus = async(customerId, status, amount) => {
+    const customer = await getLatestOrdersByCustomerId(customerId);
+    if (customer) {
+        
+        customer.set('payment_status', status);
+        customer.set('amount', amount);
+        await customer.save();
+        return customer;
+    } 
+    return null;
+}
 
-// const updatePaymentStatusByEmail = async(customerId) => {
-//     const customer = await getLatestOrdersByCustomerId(customerId);
-//     if (customer) {
-
-//     }
-
-// }
-
-module.exports = {getAllCustomers, getCustomerById,
+module.exports = {getAllCustomers, getCustomerByEmail,
     getAllOrderedDiffuserByCustomer, getAllOrderedOilByCustomer,
-    getLatestOrdersByCustomerId}
+    getLatestOrdersByCustomerId, updatePaymentOrderStatus}
