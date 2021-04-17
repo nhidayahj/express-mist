@@ -123,6 +123,7 @@ router.get('/:customer_id/confirm', async (req, res) => {
     const customer = await customerDataLayer.getCustomer(req.params.customer_id);
     const diffuserService = new diffuserCartServices(customer.get('id'));
     allDiffusers = await diffuserService.getAllDiffusers();
+
     const oilService = new oilCartServices(customer.get('id'));
     allOils = await oilService.getAllOils()
 
@@ -218,15 +219,16 @@ router.post('/process_payment', bodyParser.raw({type:'application/json'}),
         });
         console.log(e.message)
     }
-    if(event.type == 'invoice.payment_succeeded') {
-        console.log("Payment successfull: ",event.data.object);
-    }
-    // there is alot of events the Stripe webhook will trigger 
-    console.log("Stripe events:" ,event.type)
+    
     if (event.type == 'checkout.session.completed'){
         // here you put in your transaction data (customizing UI) 
         // when there is complete transaction
-        console.log("Stripe info: " ,event.data.object)
+        console.log("Stripe info: " ,event.data.object);
+        let customerEmail = event.data.object.customer_details.email;
+        console.log(customerEmail);
+        // let ordersId = event.data.object.metadata.orders
+        
+        // const updateOrders = await orderDataLayer.getLatestOrdersByCustomerId()
     }
     res.sendStatus(200)
 })

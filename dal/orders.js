@@ -57,6 +57,13 @@ const getLatestOrdersByCustomerId = async(customerId) => {
 }
 
 
+// const updatePaymentStatusByEmail = async(customerId) => {
+//     const customer = await getLatestOrdersByCustomerId(customerId);
+//     if (customer) {
+
+//     }
+
+// }
 
 module.exports = {getAllCustomers, getCustomerById,
     getAllOrderedDiffuserByCustomer, getAllOrderedOilByCustomer,
