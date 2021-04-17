@@ -83,10 +83,27 @@ const searchFields = (product) => {
 
 }
 
-const orderFields = () => {
+const orderSearchFields = () => {
     return forms.create({
-        'name':fields.string({
-            label:'CustomerName',
+        'order_id':fields.string({
+            label:'Order ID',
+            required:false,
+            errorAfterField:false, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            validators:[validators.integer()]
+        }),
+        'payment_status':fields.string({
+            label:'Payment Status',
+            required:false,
+            errorAfterField:false, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }
+        }),
+        'order_status':fields.string({
+            label:'Order Status',
             required:false,
             errorAfterField:false, 
             cssClasses: {
@@ -96,4 +113,4 @@ const orderFields = () => {
     })
 }
 
-module.exports = {bootstrapField, searchFields,orderFields}
+module.exports = {bootstrapField, searchFields,orderSearchFields}
