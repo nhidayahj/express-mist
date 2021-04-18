@@ -125,7 +125,11 @@ const Order_Oil = bookshelf.model('Order_Oil', {
     }
 })
 
+const BlacklistedToken = bookshelf.model('BlacklistedToken', {
+    tableName:'blacklisted_tokens'
+})
+
 
 module.exports = {Diffuser, Diffuser_Category, Diffuser_Tag, DiffuserCartItem, 
                     Oils, Sizes, Oil_Tag,OilCartItem, 
-                    User, Role, Member, Orders, Order_Diffuser, Order_Oil}
+                    User, Role, Member, Orders, Order_Diffuser, Order_Oil, BlacklistedToken}
