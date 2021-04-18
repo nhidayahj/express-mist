@@ -214,5 +214,6 @@ const createOilForm = (sizes, tags) => {
     })
 }
 
-module.exports = {bootstrapField, createProductForm,searchDiffuserFields,
+
+module.exports = {bootstrapField, createProductForm,
              createOilForm};

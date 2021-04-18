@@ -13,7 +13,7 @@
 
 <div class="container-fluid">
     <h2>Diffuser products</h2>
-    <a href="/diffusers/create" class="btn btn-info btn-sm mt-4 mb-4">Add Stock</a>
+    <a href="/diffusers/create" class="btn btn-info btn-sm mt-4 mb-4">Add New Stock</a>
 
     <table class="table">
         <thead class="thead-dark">
@@ -46,7 +46,7 @@
                 <td>{{this.category.name}}</td>
                 <td>{{#each this.tags}}<span
                         class="tags-badge badge badge-pill badge-info ml-2">{{this.name}}</span>{{/each}}</td>
-                <td class="sgd">{{this.cost}}</td>
+                <td class="price">{{this.cost}}</td>
                 <td>{{this.stock}}</td>
                 <td>
                     <a href="/diffusers/{{this.id}}/update" class="btn btn-warning btn-sm ml-2">Update</a>
@@ -61,7 +61,7 @@
 
 {{#block 'js'}}
 <script>
-    let priceCurr = document.getElementsByClassName("sgd");
+    let priceCurr = document.getElementsByClassName("price");
     for (let price of priceCurr) {
         console.log((price))
         let newPrice = (parseFloat(price.innerHTML) / 100.00).toFixed(2)

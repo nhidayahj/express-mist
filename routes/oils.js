@@ -1,23 +1,92 @@
 const express = require('express');
 const router = express.Router();
 
-const {Oils} = require('../models/diffusers');
+const { Oils } = require('../models/diffusers');
 const oilDataLayer = require('../dal/oils');
 
-const {bootstrapField, createOilForm} = require('../forms');
-const {checkIfAuthenticated} = require('../middleware')
+const { bootstrapField, createOilForm } = require('../forms');
+const {searchOilFields } = require('../forms/searchField');
+const { checkIfAuthenticated } = require('../middleware')
 
-router.get('/', async (req,res) => {
-    const allOils = await oilDataLayer.getAllOils();
-    const allOilsJSON = allOils.toJSON()
-    // console.log("All tags: ", allTags)
-    // console.log('all oils: ', allOilsJSON);
-    res.render('products/oils', {
-        'oil':allOilsJSON
+router.get('/', async (req, res) => {
+    // const allOilsJSON = allOils.toJSON()
+
+    const allTags = await oilDataLayer.getAllTags()
+    const allSizes = await oilDataLayer.getAllSizes()
+    allSizes.unshift([0, 'Choose bottle size'])
+    const oilSearch = searchOilFields(allSizes);
+
+    let queryOil = Oils.collection();
+
+    oilSearch.handle(req, {
+        'empty': async (form) => {
+            const allOils = await queryOil.fetch({
+                withRelated: ['sizes', 'tags']
+            });
+            res.render('products/oils', {
+                'form':form.toHTML(bootstrapField),
+                'oil': allOils.toJSON()
+            })
+        }, 
+        'error': async(form) => {
+            const allOils = await queryOil.fetch({
+                withRelated:['sizes', 'tags']
+            })
+            req.flash("error_messages", "No result found.")
+            res.render('products/oils', {
+                'form':form.toHTML(bootstrapField),
+                'oil':allOils.toJSON()
+            })
+        },
+        'success':async(form) => {
+            if(form.data.name) {
+                queryOil = queryOil
+                .where('name', 'like', '%' + req.query.name + '%')
+            }
+
+            if(form.data.min_cost) {
+                queryOil = queryOil
+                    .where('cost', '>=', parseFloat(req.query.min_cost) * 100.00)
+            }
+
+            if (form.data.max_cost) {
+                queryOil = queryOil
+                    .where('cost', '<=', parseFloat(req.query.max_cost) * 100.00)
+            }
+
+            if(form.data.sizes !== '0') {
+                queryOil = queryOil
+                    .query('join', 'oils_sizes', 'oils.id', 'oil_id')
+                    .where('size_id', '=', req.query.sizes)
+            }
+
+            if(form.data.min_stock) {
+                queryOil = queryOil 
+                    .where('stock', '>=', form.data.min_stock)
+            }
+
+            if(form.data.max_stock) {
+                queryOil = queryOil 
+                    .where('stock', '<=', form.data.max_stock)
+            }
+
+            
+
+            let allOils = await queryOil.fetch({
+                withRelated:['sizes', 'tags']
+            })
+            req.flash("success_messages", "Search result found.")
+            res.render('products/oils', {
+                'form':form.toHTML(bootstrapField),
+                'oil':allOils.toJSON()
+            })
+        }
     })
+
+
 })
 
-router.get('/create', checkIfAuthenticated, async(req,res) => {
+router.get('/create', checkIfAuthenticated, async (req, res) => {
     const allOils = await oilDataLayer.getAllOils();
     const allSizes = await oilDataLayer.getAllSizes();
     const allTags = await oilDataLayer.getAllTags();
@@ -26,13 +95,13 @@ router.get('/create', checkIfAuthenticated, async(req,res) => {
     const oilForm = createOilForm(allSizes, allTags);
 
     res.render('products/create', {
-        form:oilForm.toHTML(bootstrapField),
-        oil:allOils
+        form: oilForm.toHTML(bootstrapField),
+        oil: allOils
     })
 
 })
 
-router.post('/create', checkIfAuthenticated, async(req,res) => {
+router.post('/create', checkIfAuthenticated, async (req, res) => {
     const allSizes = await oilDataLayer.getAllSizes();
     const allTags = await oilDataLayer.getAllTags();
 
@@ -40,14 +109,14 @@ router.post('/create', checkIfAuthenticated, async(req,res) => {
 
     newOil.handle(req, {
         'success': async (form) => {
-            let {tags, sizes, ...productData} = form.data;
+            let { tags, sizes, ...productData } = form.data;
             const newItem = new Oils();
             newItem.set(productData)
             await newItem.save()
 
             if (sizes) {
                 await newItem.sizes().attach(sizes.split(','))
-            }            
+            }
             if (tags) {
                 await newItem.tags().attach(tags.split(','))
             }
@@ -64,18 +133,18 @@ router.post('/create', checkIfAuthenticated, async(req,res) => {
 
 })
 
-router.get('/:oil_id/update', checkIfAuthenticated, async(req,res) => {
+router.get('/:oil_id/update', checkIfAuthenticated, async (req, res) => {
     const oil = await oilDataLayer.getOilById(req.params.oil_id);
     const oilSizes = await oilDataLayer.getAllSizes();
     const oilTags = await oilDataLayer.getAllTags();
     const oilJSON = oil.toJSON();
     // console.log(oilJSON);
 
-    const existingTags = oilJSON.tags.map((t)=>{
+    const existingTags = oilJSON.tags.map((t) => {
         return t.id
     })
 
-    const sizes = oilJSON.sizes.map((s)=>{
+    const sizes = oilJSON.sizes.map((s) => {
         return s.id
     })
 
@@ -90,13 +159,13 @@ router.get('/:oil_id/update', checkIfAuthenticated, async(req,res) => {
 
 
     res.render('products/update', {
-        'form':oilForm.toHTML(bootstrapField),
-        'oil':oilJSON,
-        'product':"oil"
+        'form': oilForm.toHTML(bootstrapField),
+        'oil': oilJSON,
+        'product': "oil"
     })
 })
 
-router.post('/:oil_id/update', checkIfAuthenticated, async (req,res) => {
+router.post('/:oil_id/update', checkIfAuthenticated, async (req, res) => {
     const oilToEdit = await oilDataLayer.getOilById(req.params.oil_id);
     const oilToEditJSON = oilToEdit.toJSON();
     const allSizes = await oilDataLayer.getAllSizes();
@@ -105,9 +174,9 @@ router.post('/:oil_id/update', checkIfAuthenticated, async (req,res) => {
     const oilForm = createOilForm(allSizes, allTags);
 
     oilForm.handle(req, {
-        'success': async(form) => {
-            let {sizes, tags, ...productData} = form.data;
-            oilToEdit.set(productData);  
+        'success': async (form) => {
+            let { sizes, tags, ...productData } = form.data;
+            oilToEdit.set(productData);
             await oilToEdit.save();
 
             let newSelectedSize = sizes.split(',');
@@ -139,14 +208,14 @@ router.post('/:oil_id/update', checkIfAuthenticated, async (req,res) => {
 
 })
 
-router.get('/:oil_id/remove', checkIfAuthenticated, async (req,res) => {
+router.get('/:oil_id/remove', checkIfAuthenticated, async (req, res) => {
     const oilToRemove = await oilDataLayer.getOilById(req.params.oil_id);
     res.render('products/remove', {
         'oil': oilToRemove.toJSON()
     })
 })
 
-router.post('/:oil_id/remove', checkIfAuthenticated, async(req,res) => {
+router.post('/:oil_id/remove', checkIfAuthenticated, async (req, res) => {
     const oilToRemove = await oilDataLayer.getOilById(req.params.oil_id);
     let stock = oilToRemove.get("name");
     await oilToRemove.destroy();

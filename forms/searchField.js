@@ -65,20 +65,28 @@ const searchDiffuserFields = (categories, tags) => {
             widget:widgets.select(categories),
             choices:categories
         }),
-        'tags':fields.string({
-            label:'Diffuser Tags',
+        'min_stock':fields.string({
+            label:'Min. stock count',
             required:false,
             errorAfterField:true, 
             cssClasses: {
                 label:['form-label', 'text-primary'],
             }, 
-            widget:widgets.multipleSelect(tags),
-            choices:tags
+            validators:[validators.integer()]
+        }),
+        'max_stock':fields.string({
+            label:'Max. stock count',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }, 
+            validators:[validators.integer()]
         })
     })
 }
 
-const searchOilFields = (sizes, tags) => {
+const searchOilFields = (sizes) => {
     return forms.create({
         'name':fields.string({
             label:'Product Name',
@@ -89,7 +97,7 @@ const searchOilFields = (sizes, tags) => {
             }
         }),
         'min_cost':fields.string({
-            label:'Minimum cost',
+            label:'Minimum Cost',
             required:false,
             errorAfterField:true, 
             cssClasses: {
@@ -116,15 +124,23 @@ const searchOilFields = (sizes, tags) => {
             widget:widgets.select(sizes),
             choices:sizes
         }),
-        'tags':fields.string({
-            label:'Tags',
+        'min_stock':fields.string({
+            label:'Min. stock count',
             required:false,
             errorAfterField:true, 
             cssClasses: {
                 label:['form-label', 'text-primary'],
-            }, 
-            widget:widgets.multipleSelect(tags),
-            choices:tags
+            },
+            validators:[validators.integer()]
+        }),
+        'max_stock':fields.string({
+            label:'Max. stock count',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            validators:[validators.integer()]
         })
     })
 }

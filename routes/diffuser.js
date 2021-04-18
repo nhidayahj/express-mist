@@ -7,7 +7,9 @@ const { Diffuser, Diffuser_Category } = require('../models/diffusers')
 
 const diffuserDataLayer = require('../dal/diffuser')
 
-const { bootstrapField, createProductForm, searchDiffuserFields } = require('../forms');
+const {bootstrapField, createProductForm} = require('../forms');
+const {searchDiffuserFields} = require('../forms/searchField');
+
 const { checkIfAuthenticated } = require('../middleware')
 
 router.get('/', async (req, res) => {
@@ -62,11 +64,19 @@ router.get('/', async (req, res) => {
                     .where('diffuser_category.id', 'like', '%' + req.query.category_id + '%')
             }
 
-            if(form.data.tags) {
-                queryDiffuser = queryDiffuser
-                    .query('join', 'diffusers_diffuser_tags', 'diffusers.id', 'diffuser_id')
-                    .where('diffuser_tag_id', 'in', form.data.tags.split(','))
+            if(form.data.min_stock) {
+                queryDiffuser = queryDiffuser.where('cost', '>=', form.data.min_cost)
             }
+
+            if(form.data.max_stock) {
+                queryDiffuser = queryDiffuser.where('cost', '<=', form.data.max_cost)
+            }
+
+            // if(form.data.tags) {
+            //     queryDiffuser = queryDiffuser
+            //         .query('join', 'diffusers_diffuser_tags', 'diffusers.id', 'diffuser_id')
+            //         .where('diffuser_tag_id', 'in', form.data.tags.split(','))
+            // }
 
             let allDiffusers = await queryDiffuser.fetch({
                 withRelated:['category', 'tags']

@@ -1,9 +1,21 @@
 {{#extends 'base'}}
 {{#block 'title'}}Aroma Misty - Essential Oils{{/block}}
 {{#block 'content'}}
+<div class="container">
+    <h3>Filter Search</h3>
+    <form method="GET">
+        {{{form}}}
+        <input type="submit" class="btn btn-primary btn-sm mt-3 mb-4" value="Filter" />
+
+    </form>
+
+</div>
+
+
+
 <div class="container-fluid">
     <h2>Essential Oil</h2>
-    <a href="oils/create" class="btn btn-info btn-sm mt-3 mb-3">Add Stock</a>
+    <a href="oils/create" class="btn btn-info btn-sm mt-3 mb-3">Add New Stock</a>
 
     <table class="table">
         <thead class="thead-dark">
@@ -13,7 +25,7 @@
                 <th scope="col">Product Name</th>
                 <th scope="col">Product Size (mL)</th>
                 <th scope="col">Tags</th>
-                <th scope="col">Price (in cents)</th>
+                <th scope="col">Price (SGD)</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Stock Actions</th>
 
@@ -43,7 +55,7 @@
                 </td>
                 <td>{{#each this.tags}}<span
                         class="tags-badge badge badge-pill badge-info ml-2">{{this.name}}</span>{{/each}}</td>
-                <td>{{this.cost}}</td>
+                <td class="price">{{this.cost}}</td>
                 <td>{{this.stock}}</td>
                 <td>
                     <a href="/oils/{{this.id}}/update" class="btn btn-warning btn-sm ml-2">Update</a>
@@ -54,6 +66,19 @@
         </tbody>
     </table>
 </div>
+
+{{/block}}
+
+{{#block 'js'}}
+<script>
+    let priceCurr = document.getElementsByClassName("price")
+    for (let price of priceCurr) {
+        let newPrice = (parseFloat(price.innerHTML) / 100.00).toFixed(2)
+        price.innerHTML = newPrice
+    }
+
+
+</script>
 
 
 {{/block}}
