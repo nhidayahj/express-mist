@@ -13,9 +13,10 @@ let app = express();
 
 app.set("view engine", 'hbs')
 
-app.use(cors());
 
-app.use(express.static("public"))
+app.use(cors());
+app.use(express.static('public'))
+// app.use(express.static(__dirname + '/public'))
 
 wax.on(hbs.handlebars);
 wax.setLayoutPath('./views/layouts')
