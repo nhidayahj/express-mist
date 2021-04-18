@@ -93,7 +93,7 @@ router.get('/', async (req, res) => {
 
 // get indv customer order details
 router.get('/customerItems/:customer_id/:order_id', checkIfAuthenticated, async (req, res) => {
-    const customer = await ordersDataLayer.getLatestOrdersByCustomerId(req.params.customer_id)
+    const order = await ordersDataLayer.getCustomerOrderById(req.params.order_id)
 
     const orderedDiffuser = await ordersDataLayer
         .getAllOrderedDiffuserByCustomer(req.params.customer_id, req.params.order_id);
@@ -101,20 +101,47 @@ router.get('/customerItems/:customer_id/:order_id', checkIfAuthenticated, async 
     const orderedOil = await ordersDataLayer
         .getAllOrderedOilByCustomer(req.params.customer_id, req.params.order_id);
 
+    const paymentStatus = await ordersDataLayer.getPaymentStatusByOrderId(req.params.order_id);
+    
     // res.send({
-    //     // 'items':orderedItems,
+        
     //     'diffuser':orderedDiffuser, 
     //     'oil': orderedOil,
-    //     'customer':customer
+    //     'order':order
     // });
 
     res.render("orders/customerOrders", {
         'diffuser': orderedDiffuser.toJSON(),
         'oil': orderedOil.toJSON(),
-        'customer': customer.toJSON(),
+        'order': order.toJSON(),
+        'paymentStatus':paymentStatus
     })
 })
 
+// update PAID orders to either 'transit' or completed
+router.post('/customerItems/:customer_id/:order_id', async(req,res) => {
+    const order = await ordersDataLayer.getCustomerOrderById(req.params.order_id)
+
+    const orderedDiffuser = await ordersDataLayer
+        .getAllOrderedDiffuserByCustomer(req.params.customer_id, req.params.order_id);
+
+    const orderedOil = await ordersDataLayer
+        .getAllOrderedOilByCustomer(req.params.customer_id, req.params.order_id);
+
+    try {
+        const order = await ordersDataLayer.getCustomerOrderById(req.params.order_id);
+        if (order) {
+            order.set('order_status', req.body.order_status);
+            await order.save()
+        }
+        req.flash("success_messages", `Order No. #${req.params.order_id} order status has been updated.`)
+        res.status(200);
+        res.redirect('back')
+    } catch (e) {
+        res.status(500);
+        res.send("Error updating status");
+    }
+})
 
 module.exports = router;
 

@@ -3,21 +3,36 @@
 
 {{#block 'content'}}
 <div class="container">
-    <h3>Customer Order Id: #{{customer.id}}</h3>
+    <h3>Customer Order Id: #{{order.id}}</h3>
     <ul>
-        <li>Customer Name: {{customer.customers.name}}</li>
-        <li>Customer Email: {{customer.customers.email}}</li>
-        <li>Customer Mobile No.: +65 {{customer.customers.mobile_no}}</li>
-        <li>Customer Shipping Address.: {{customer.street_name}} S({{customer.postal_code}}) #{{customer.unit_code}}
+        <li>Customer Name: {{order.customers.name}}</li>
+        <li>Customer Email: {{order.customers.email}}</li>
+        <li>Customer Mobile No.: +65 {{order.customers.mobile_no}}</li>
+        <li>Customer Shipping Address.: {{order.street_name}} S({{order.postal_code}}) #{{order.unit_code}}
         </li>
-        
+
     </ul>
     <h3>Customer Order Details</h3>
     <ul>
-        <li>Ordered Date: {{customer.order_date}}</li>
-        <li>Payment Status: {{customer.payment_status}}</li>
-        <li>Shipping Order Status: {{customer.order_status}}</li>
+        <li>Ordered Date: {{order.order_date}}</li>
+        <li class="payment_status">Payment Status: {{order.payment_status}}</li>
+        <li class="order_status">Shipping Order Status:
+            {{order.order_status}}
+        </li>
     </ul>
+    <div class="update_order">
+         <form method="POST">
+             <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+            <div class="form-group mt-3">
+                <select class="form-control" name="order_status">
+                    <option value="In-Transit">Order in transit</option>
+                    <option value="Completed">Completed</option>
+                </select>
+                <input type="submit" value="Update" class="btn btn-sm btn-warning mt-3"/>
+            </div>
+        </form>
+    </div>
+
     <h3>Ordered Items</h3>
 
     <table class="table mt-4" id="diffuser-table">
@@ -34,7 +49,7 @@
             {{#each diffuser}}
             <tr>
                 <td>
-                    <img src="{{this.diffuser.image_url}}" alt="product image" style="width:88px;height:95px"/>
+                    <img src="{{this.diffuser.image_url}}" alt="product image" style="width:88px;height:95px" />
                 </td>
 
                 <td>
@@ -83,19 +98,16 @@
 
 {{#block 'js'}}
 <script>
-    let diffuser = '{{diffuser}}'
-    console.log(diffuser)
-    {{!-- if (orderItemList.diffuserOrders > 0) {
-        document.querySelector("#diffuser-table").style.display = 'block'
-    } else {
-        document.querySelector("#diffuser-table").style.display = 'none'
-    } --}}
+    let paymentStatus = '{{paymentStatus}}'
+    console.log(paymentStatus)
 
-    {{!-- if (orderItemList.oilOrders > 0) {
-        document.querySelector("#oil-table").style.display = 'block'
+    if (paymentStatus == 'paid') {
+        document.querySelector(".order_status").style.display = 'none'
+        document.querySelector(".update_order").style.display = "block"
     } else {
-        document.querySelector("#oil-table").style.display = 'none'
-    } --}}
+        document.querySelector(".update_order").style.display = 'none'
+    }
+
 
 </script>
 {{/block}}

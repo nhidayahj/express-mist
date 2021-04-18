@@ -40,7 +40,9 @@
                 <td>
                     <a href="orders/customerItems/{{this.orders.customers.id}}/{{this.orders.id}}">{{this.orders.customers.name}}</a>
                 </td>
-                <td>{{this.orders.payment_status}}</td>
+                <td class="payment_status">{{this.orders.payment_status}}</td>
+                
+
                 <td>{{this.orders.order_status}}</td>
                 <td class="date">{{this.orders.order_date}}</td>
             </tr>
@@ -93,6 +95,8 @@
     for (let date of formatDate) {
         date.innerHTML = date.innerHTML.slice(0, 16)
     }
+
+    
 </script>
 
 {{/block}}
