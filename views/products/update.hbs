@@ -2,37 +2,40 @@
 {{#block 'title'}}Aroma Mist - Update Stock{{/block}}
 
 {{#block 'content'}}
-{{#if diffuser}}
-<h2>Update Stock Item: {{diffuser.diffuser_name}}</h2>
-{{else}}
-<h2>Update Stock Item: {{oil.name}}</h2>
-{{/if}}
-
-
-<form method="POST">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-    <div>
-        {{#if diffuser}}
-        <img src="{{diffuser.image_url}}" style="width:150px;height:175px;margin-top:5px;margin-bottom:5px"
-            id="product_img_diffuser" />
-        {{else}}
-        <img src="{{oil.image_url}}" style="width:150px;height:175px;margin-top:5px;margin-bottom:5px"
-            id="product_img_oil" />
-        {{/if}}
-        <div>
-            <input type="hidden" id="upload_img" role="uploadcare-uploader" />
-        </div>
-    </div>
-    <div class="mt-3">
-        {{{form}}}
-    </div>
-    <input id="update_btn" type="submit" value="Update Item" class="btn btn-warning btn-sm mt-4 mb-4" />
+<div class="container">
     {{#if diffuser}}
-    <a href="/diffusers" class="btn btn-danger btn-sm mt-4 mb-4">Cancel</a>
+    <h2>Update Stock Item: {{diffuser.diffuser_name}}</h2>
     {{else}}
-    <a href="/oils" class="btn btn-danger btn-sm mt-4 mb-4">Cancel</a>
+    <h2>Update Stock Item: {{oil.name}}</h2>
     {{/if}}
-</form>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+        <div>
+            {{#if diffuser}}
+            <img src="{{diffuser.image_url}}" style="width:150px;height:175px;margin-top:5px;margin-bottom:5px"
+                id="product_img_diffuser" />
+            {{else}}
+            <img src="{{oil.image_url}}" style="width:150px;height:175px;margin-top:5px;margin-bottom:5px"
+                id="product_img_oil" />
+            {{/if}}
+            <div>
+                <input type="hidden" id="upload_img" role="uploadcare-uploader" />
+            </div>
+        </div>
+        <div class="mt-3">
+            {{{form}}}
+        </div>
+        <input id="update_btn" type="submit" value="Update Item" class="btn btn-warning btn-sm mt-4 mb-4" />
+        {{#if diffuser}}
+        <a href="/diffusers" class="btn btn-secondary btn-sm mt-4 mb-4">Cancel</a>
+        <a href="/diffusers/{{diffuser.id}}/remove" class="btn btn-danger btn-sm mt-4 mb-4">Delete Product</a>
+        {{else}}
+        <a href="/oils" class="btn btn-secondary btn-sm mt-4 mb-4">Cancel</a>
+        <a href="/oils/{{oil.id}}/remove" class="btn btn-danger btn-sm mt-4 mb-4">Delete Product</a>
+
+        {{/if}}
+    </form>
+</div>
 {{/block}}
 
 {{#block 'js'}}
@@ -48,12 +51,12 @@
     if (product === "diffuser") {
         console.log("update post for diffuser");
         document.querySelector("#update_btn").addEventListener('click', function () {
-            if(document.querySelector("#upload_img").value !== document.querySelector("#id_image_url").value && 
-            document.querySelector("#upload_img").value !== "")   {
-                 document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value
-            } 
+            if (document.querySelector("#upload_img").value !== document.querySelector("#id_image_url").value &&
+                document.querySelector("#upload_img").value !== "") {
+                document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value
+            }
             else {
-                  document.querySelector("#id_image_url").value = document.querySelector("#id_image_url").value;
+                document.querySelector("#id_image_url").value = document.querySelector("#id_image_url").value;
             }
         })
     }
@@ -61,12 +64,12 @@
     if (product === "oil") {
         console.log("update post for oil");
         document.querySelector("#update_btn").addEventListener("click", function () {
-            if(document.querySelector("#upload_img").value !== document.querySelector("#id_image_url").value && 
-            document.querySelector("#upload_img").value !== "")   {
-                 document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value
-            } 
+            if (document.querySelector("#upload_img").value !== document.querySelector("#id_image_url").value &&
+                document.querySelector("#upload_img").value !== "") {
+                document.querySelector("#id_image_url").value = document.querySelector("#upload_img").value
+            }
             else {
-                  document.querySelector("#id_image_url").value = document.querySelector("#id_image_url").value;
+                document.querySelector("#id_image_url").value = document.querySelector("#id_image_url").value;
             }
         })
     }

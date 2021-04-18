@@ -12,66 +12,112 @@
             <option value="oil">Essential Oil</option>
         </select>
     </div>
-    <div id="diffuser-search" style="display:none";>
-        <form method="GET">
+    <form method="GET">
             {{{form}}}
             <input type="submit" class="btn btn-primary btn-sm" value="Filter" />
         </form>
-    </div>
-    <div id="oil-search" style="display:none";>
-        <form method="GET">
-            {{{form}}}
-            <input type="submit" class="btn btn-primary btn-sm" value="Filter" />
-        </form>
-    </div>
 </div>
 
+<div class="container-fluid">
+    <div class="mt-4">
+        <h2>Diffuser Products</h2>
+    </div>
+    <table class="table mt-4">
+        <thead class="thead-dark">
+            <tr>
 
+                <th scope="col">Product Image</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Price (SGD)</th>
+                <th scope="col">Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each diffuser}}
+            <tr>
+                <td>
+                    {{#if this.image_url}}
+                    <img src="{{this.image_url}}" style="width:88px;height:95px" />
+                    {{/if}}
+                </td>
+                <td>
+                    <a href="/diffusers/{{this.id}}/update">{{this.diffuser_name}}</a>
+                </td>
+                <td>{{this.category.name}}</td>
+                <td class="price">{{this.cost}}</td>
+                <td>{{this.stock}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
 
+<div class="container-fluid">
+    <h2>Essential Oil</h2>
 
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Product Image</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Product Size (mL)</th>
+                <th scope="col">Price (SGD)</th>
+                <th scope="col">Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {{#each oil}}
+                <td>
+                    {{#if this.image_url}}
+                    <img src="{{this.image_url}}" style="width:88px;height:95px" />
+                    {{/if}}
+                </td>
+                <td>
+                    <a href="/oils/{{this.id}}/update">{{this.name}}</a>
+                </td>
+                <td>
+                    {{#each sizes}}
+                    <span class="size-badge badge badge-pill badge-info ml-2">
+                        {{this.size}} mL
+                    </span>
+                    {{/each}}
+                </td>
+                
+                <td class="price">{{this.cost}}</td>
+                <td>{{this.stock}}</td>
+                
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
 
-
-<h4>Diffusers</h4>
-<ul>
-    {{#each diffuser}}
-    <li style="color:blueviolet">Name: {{this.diffuser_name}}</li>
-    <li style="color:rgb(226, 43, 217)">Category: {{this.category.name}}</li>
-    {{#each tags}}
-    <li>Tags: {{this.name}}</li>
-    {{/each}}
-    {{/each}}
-</ul>
-
-<h4>Essential Oil</h4>
-<ul>
-    {{#each oil}}
-    <li style="color:blueviolet">Name: {{this.name}}</li>
-    {{#each tags}}
-    <li style="color:rgb(226, 43, 217)">Tags: {{this.name}}</li>
-    {{/each}}
-    {{/each}}
-</ul>
 {{/block}}
 
 
 {{#block 'js'}}
 <script>
+    let priceCurr = document.getElementsByClassName("price");
+    for (let price of priceCurr) {
+        let newPrice = (parseFloat(price.innerHTML) / 100.00).toFixed(2)
+        price.innerHTML = newPrice
+    }
     let itemToSearch = document.querySelector("#itemSearch");
     let selectedItem;
 
     itemToSearch.addEventListener('change', function () {
         let selectedProduct = document.querySelector("#itemSearch").value;
         if (selectedProduct == "diffuser") {
-            document.querySelector("#diffuser-search").style.display = 'block'
-            document.querySelector("#oil-search").style.display = "none";
-        } else if (selectedProduct == "oil"){
-            document.querySelector("#diffuser-search").style.display = "none";
-            document.querySelector("#oil-search").style.display = 'block'
-        } else {
-            document.querySelector("#diffuser-search").style.display = "none";
-            document.querySelector("#oil-search").style.display = 'none'
+            document.querySelector("#id_product_type").value = selectedProduct
+           
+        } else if(selectedProduct == 'oil') {
+             document.querySelector("#id_product_type").value = selectedProduct
         }
     })
+
+    
 </script>
 {{/block}}
 

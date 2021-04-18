@@ -27,7 +27,7 @@ var bootstrapField = function (name, object){
 };
 
 
-const searchDiffuserFields = (categories, tags) => {
+const searchDiffuserFields = (categories) => {
     return forms.create({
         'diffuser_name':fields.string({
             label:'Product Name',
@@ -145,9 +145,63 @@ const searchOilFields = (sizes) => {
     })
 }
 
-// const searchFields = (product) => {
-
-// }
+const searchFields = () => {
+    return forms.create({
+        'product_type':fields.string({
+            label:'Product Name',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            widget:widgets.hidden()
+        }),
+        'name':fields.string({
+            label:'Product Name',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }
+        }),
+        'min_cost':fields.string({
+            label:'Minimum Cost',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            validators:[validators.integer()]
+        }),
+        'max_cost':fields.string({
+            label:'Maximum Cost',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            validators:[validators.integer()]
+        }), 
+        'min_stock':fields.string({
+            label:'Min. stock count',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            validators:[validators.integer()]
+        }),
+        'max_stock':fields.string({
+            label:'Max. stock count',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            validators:[validators.integer()]
+        })
+    })
+}
 
 const orderSearchFields = () => {
     return forms.create({
@@ -179,4 +233,5 @@ const orderSearchFields = () => {
     })
 }
 
-module.exports = {bootstrapField, searchDiffuserFields,searchOilFields,orderSearchFields}
+module.exports = {bootstrapField, searchFields,
+    searchDiffuserFields,searchOilFields,orderSearchFields}
