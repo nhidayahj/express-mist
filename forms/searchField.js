@@ -26,11 +26,11 @@ var bootstrapField = function (name, object){
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
-/*
-const searchFields = (sizes, tags) => {
+
+const searchDiffuserFields = (categories, tags) => {
     return forms.create({
-        'name':fields.string({
-            label:'Essential Oil',
+        'diffuser_name':fields.string({
+            label:'Product Name',
             required:false,
             errorAfterField:true, 
             cssClasses: {
@@ -38,7 +38,7 @@ const searchFields = (sizes, tags) => {
             }
         }),
         'min_cost':fields.string({
-            label:'Product Name',
+            label:'Minimum cost',
             required:false,
             errorAfterField:true, 
             cssClasses: {
@@ -47,7 +47,7 @@ const searchFields = (sizes, tags) => {
             validators:[validators.integer()]
         }),
         'max_cost':fields.string({
-            label:'Product Name',
+            label:'Maximum Cost',
             required:false,
             errorAfterField:true, 
             cssClasses: {
@@ -55,8 +55,18 @@ const searchFields = (sizes, tags) => {
             },
             validators:[validators.integer()]
         }), 
+        'category_id':fields.string({
+            label:'Category',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }, 
+            widget:widgets.select(categories),
+            choices:categories
+        }),
         'tags':fields.string({
-            label:'Product Name',
+            label:'Diffuser Tags',
             required:false,
             errorAfterField:true, 
             cssClasses: {
@@ -64,24 +74,64 @@ const searchFields = (sizes, tags) => {
             }, 
             widget:widgets.multipleSelect(tags),
             choices:tags
+        })
+    })
+}
+
+const searchOilFields = (sizes, tags) => {
+    return forms.create({
+        'name':fields.string({
+            label:'Product Name',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }
         }),
+        'min_cost':fields.string({
+            label:'Minimum cost',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            validators:[validators.integer()]
+        }),
+        'max_cost':fields.string({
+            label:'Maximum Cost',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            validators:[validators.integer()]
+        }), 
         'sizes':fields.string({
-            label:'Bottle Size',
+            label:'Bottle Size (in mL)',
             required:false,
             errorAfterField:true, 
             cssClasses: {
                 label:['form-label', 'text-primary'],
             }, 
-            widget:widgets.multipleSelect(sizes),
+            widget:widgets.select(sizes),
             choices:sizes
+        }),
+        'tags':fields.string({
+            label:'Tags',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }, 
+            widget:widgets.multipleSelect(tags),
+            choices:tags
         })
     })
 }
-*/
 
-const searchFields = (product) => {
+// const searchFields = (product) => {
 
-}
+// }
 
 const orderSearchFields = () => {
     return forms.create({
@@ -113,4 +163,4 @@ const orderSearchFields = () => {
     })
 }
 
-module.exports = {bootstrapField, searchFields,orderSearchFields}
+module.exports = {bootstrapField, searchDiffuserFields,searchOilFields,orderSearchFields}

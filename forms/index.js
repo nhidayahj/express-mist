@@ -93,6 +93,57 @@ const createProductForm = (categories, tags) => {
     })
 }
 
+const searchDiffuserFields = (categories, tags) => {
+    return forms.create({
+        'diffuser_name':fields.string({
+            label:'Product Name',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }
+        }),
+        'min_cost':fields.string({
+            label:'Minimum Cost',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            validators:[validators.integer()]
+        }),
+        'max_cost':fields.string({
+            label:'Maximum Cost',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            },
+            validators:[validators.integer()]
+        }), 
+        'category_id':fields.string({
+            label:'Category',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }, 
+            widget:widgets.select(categories),
+            choices:categories
+        }),
+        'tags':fields.string({
+            label:'Diffuser Tags',
+            required:false,
+            errorAfterField:true, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }, 
+            widget:widgets.multipleSelect(tags),
+            choices:tags
+        })
+    })
+}
+
 // for oil form
 const createOilForm = (sizes, tags) => {
     return forms.create({
@@ -163,4 +214,5 @@ const createOilForm = (sizes, tags) => {
     })
 }
 
-module.exports = {bootstrapField, createProductForm, createOilForm};
+module.exports = {bootstrapField, createProductForm,searchDiffuserFields,
+             createOilForm};

@@ -3,12 +3,17 @@
 {{#block 'title'}}Aroma Misty - Diffusers{{/block}}
 
 {{#block 'content'}}
+<div class="container">
+    <h3>Filter Search</h3>
+    <form method="GET">
+        {{{form}}}
+        <input type="submit" class="btn btn-primary btn-sm mt-3 mb-4" value="Filter" />
+    </form>
+</div>
 
 <div class="container-fluid">
     <h2>Diffuser products</h2>
     <a href="/diffusers/create" class="btn btn-info btn-sm mt-4 mb-4">Add Stock</a>
-
-
 
     <table class="table">
         <thead class="thead-dark">
@@ -26,8 +31,8 @@
             </tr>
         </thead>
         <tbody>
+            {{#each diffuser}}
             <tr>
-                {{#each diffuser}}
                 {{!-- <th scope="row">1</th> --}}
                 <td class="sku">{{this.id}}</td>
                 <td>

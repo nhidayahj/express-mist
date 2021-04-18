@@ -7,22 +7,79 @@ const { Diffuser, Diffuser_Category } = require('../models/diffusers')
 
 const diffuserDataLayer = require('../dal/diffuser')
 
-const { bootstrapField, createProductForm } = require('../forms');
-const {checkIfAuthenticated} = require('../middleware')
+const { bootstrapField, createProductForm, searchDiffuserFields } = require('../forms');
+const { checkIfAuthenticated } = require('../middleware')
 
 router.get('/', async (req, res) => {
-    // const allCategories = await diffuserDataLayer.getAllCategory();
-    // const allTags = await diffuserDataLayer.getAllTags();
-    
-    const allDiffuser = await diffuserDataLayer.getAllDiffuser();
+    const allCategories = await diffuserDataLayer.getAllCategory();
+    allCategories.unshift([0, 'Choose a Category'])
+    const allTags = await diffuserDataLayer.getAllTags();
 
-    //convert diffuser object to json for form formatting 
-    const diffuserJSON = allDiffuser.toJSON();
 
-    // console.log("All Diffuser Object: ", diffuserJSON)
-    res.render('products/diffuser', {
-        'diffuser': diffuserJSON,
+    const searchDiffuser = searchDiffuserFields(allCategories, allTags)
+
+    let queryDiffuser = Diffuser.collection();
+
+    searchDiffuser.handle(req, {
+        'empty': async (form) => {
+            let allDffusers = await queryDiffuser.fetch({
+                withRelated: ['category', 'tags']
+            })
+            
+            res.render('products/diffuser', {
+                'form':form.toHTML(bootstrapField),
+                'diffuser': allDffusers.toJSON(),
+            })
+        }, 
+        'error': async(form) => {
+            let allDiffusers = await queryDiffuser.fetch({
+                withRelated:['category', 'tags']
+            });
+            req.flash("error_messages", "No results found")
+            res.render('products/diffuser', {
+                'form':form.toHTML(bootstrapField),
+                'diffuser':allDiffusers.toJSON()
+            })
+        }, 
+        'success': async(form) => {
+            if (form.data.diffuser_name){
+                queryDiffuser = queryDiffuser
+                    .where('diffuser_name', 'like', '%' + req.query.diffuser_name + '%')
+            } 
+
+            if (form.data.min_cost) {
+                queryDiffuser = queryDiffuser.where('cost', '>=', parseFloat(req.query.min_cost) * 100.00)
+            }
+            
+
+            if (form.data.max_cost) {
+                queryDiffuser = queryDiffuser.where('cost', '<=', parseFloat(req.query.max_cost) * 100.00)
+            }
+
+            if(form.data.category_id !== '0') {
+                queryDiffuser = queryDiffuser
+                    .query('join', 'diffuser_category', 'category_id', 'diffuser_category.id')
+                    .where('diffuser_category.id', 'like', '%' + req.query.category_id + '%')
+            }
+
+            if(form.data.tags) {
+                queryDiffuser = queryDiffuser
+                    .query('join', 'diffusers_diffuser_tags', 'diffusers.id', 'diffuser_id')
+                    .where('diffuser_tag_id', 'in', form.data.tags.split(','))
+            }
+
+            let allDiffusers = await queryDiffuser.fetch({
+                withRelated:['category', 'tags']
+            })
+            
+            req.flash("success_messages", "Search queries found.")
+            res.render('products/diffuser', {
+                'form':form.toHTML(bootstrapField),
+                'diffuser':allDiffusers.toJSON()
+            })
+        }
     })
+
 })
 
 
@@ -33,7 +90,7 @@ router.get('/create', checkIfAuthenticated, async (req, res) => {
 
     res.render('products/create', {
         'form': createProduct.toHTML(bootstrapField),
-        'diffuser':"diffuser"
+        'diffuser': "diffuser"
     })
 })
 
@@ -46,7 +103,7 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
 
     createProduct.handle(req, {
         'success': async (form) => {
-            let {tags, ...productData} = form.data;
+            let { tags, ...productData } = form.data;
             const newItem = new Diffuser();
             newItem.set(productData)
             await newItem.save()
@@ -64,7 +121,7 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
             res.render('products/create', {
                 'form': form.toHTML(bootstrapField),
             })
-            
+
         }
     })
 })
@@ -72,12 +129,12 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
 router.get('/:diffuser_id/update', checkIfAuthenticated, async (req, res) => {
     const getAllCategory = await diffuserDataLayer.getAllCategory();
     const allTags = await diffuserDataLayer.getAllTags();
-    
+
     const diffuserToEdit = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
     const diffuserJSON = diffuserToEdit.toJSON()
     // console.log("Diffuser to edit: ",diffuserJSON)
-     // get previous tags of products
-    const existingTags = diffuserJSON.tags.map((t)=>{
+    // get previous tags of products
+    const existingTags = diffuserJSON.tags.map((t) => {
         return t.id
     })
 
@@ -89,14 +146,14 @@ router.get('/:diffuser_id/update', checkIfAuthenticated, async (req, res) => {
     productForm.fields.stock.value = diffuserToEdit.get('stock');
     productForm.fields.tags.value = existingTags;
     productForm.fields.image_url.value = diffuserToEdit.get('image_url');
-    
-   console.log(diffuserToEdit.get('image_url'))
+
+    console.log(diffuserToEdit.get('image_url'))
 
 
     res.render('products/update', {
         'form': productForm.toHTML(bootstrapField),
         'diffuser': diffuserJSON,
-        'product':"diffuser"
+        'product': "diffuser"
     })
 
 
@@ -107,21 +164,21 @@ router.post('/:diffuser_id/update', checkIfAuthenticated, async (req, res) => {
     const allTags = await diffuserDataLayer.getAllTags();
     const diffuserToEdit = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
     // console.log("Diffuser to edit: ",diffuserToEdit.toJSON());
-    
+
     // convert product object into JSON format
     const diffuserJSON = diffuserToEdit.toJSON();
     const productForm = createProductForm(allCategory, allTags);
-    
+
     productForm.handle(req, {
         'success': async (form) => {
-            let {tags, ...diffuserData} = form.data
+            let { tags, ...diffuserData } = form.data
             diffuserToEdit.set(diffuserData);
             await diffuserToEdit.save();
 
             // becuase caolan form processing requires such to format the array
             let newSelectedTags = tags.split(',');
             let existingTags = diffuserJSON.tags.map((t) => t.id)
-            
+
             // remove existing tags
             diffuserToEdit.tags().detach(existingTags);
             diffuserToEdit.tags().attach(newSelectedTags);
@@ -130,7 +187,7 @@ router.post('/:diffuser_id/update', checkIfAuthenticated, async (req, res) => {
             res.redirect('/diffusers');
         },
         'error': (form) => {
-            
+
             res.render('products/update', {
                 'form': form.toHTML(bootstrapField),
                 'diffuser': diffuserJSON,

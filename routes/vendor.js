@@ -75,7 +75,7 @@ router.post('/login', async(req,res) => {
             if (!vendor) {
                 req.flash("error_messages", `Login access failed. Please try again. If 
                             problem still persist, please contact your administrator.`)
-                res.redirect('users/login')
+                res.redirect('/vendor/login')
             } else {
                 if (vendor.get('password') == getHashedPassword(form.data.password)) {
                     // store the user details 
@@ -91,7 +91,7 @@ router.post('/login', async(req,res) => {
                     res.redirect("/");
                 } else {
                     req.flash("error_messages", "Login details does not exists. Please try again.");
-                    res.redirect('/users/login')
+                    res.redirect('/vendor/login')
                 }
             }
         }, 

@@ -1,7 +1,7 @@
 // routes to allow vendors to view customer's cart items 
 const express = require('express');
 const router = express.Router();
-const util = require('util');
+
 
 const { Orders, Order_Diffuser, Order_Oil } = require('../models/diffusers')
 
