@@ -61,8 +61,8 @@ router.get('/', async (req, res) => {
                 orderOil = orderOil
                     .query('join', 'ship_orders', 'order_id', 'ship_orders.id')
                     .where('ship_orders.payment_status', '=', req.query.payment_status)
-            } 
-            
+            }
+
             if (form.data.order_status) {
                 orderDiffuser = orderDiffuser
                     .query('join', 'ship_orders', 'order_id', 'ship_orders.id')
@@ -102,9 +102,9 @@ router.get('/customerItems/:customer_id/:order_id', checkIfAuthenticated, async 
         .getAllOrderedOilByCustomer(req.params.customer_id, req.params.order_id);
 
     const paymentStatus = await ordersDataLayer.getPaymentStatusByOrderId(req.params.order_id);
-    
+
     // res.send({
-        
+
     //     'diffuser':orderedDiffuser, 
     //     'oil': orderedOil,
     //     'order':order
@@ -114,20 +114,12 @@ router.get('/customerItems/:customer_id/:order_id', checkIfAuthenticated, async 
         'diffuser': orderedDiffuser.toJSON(),
         'oil': orderedOil.toJSON(),
         'order': order.toJSON(),
-        'paymentStatus':paymentStatus
+        'paymentStatus': paymentStatus
     })
 })
 
 // update PAID orders to either 'transit' or completed
-router.post('/customerItems/:customer_id/:order_id', async(req,res) => {
-    const order = await ordersDataLayer.getCustomerOrderById(req.params.order_id)
-
-    const orderedDiffuser = await ordersDataLayer
-        .getAllOrderedDiffuserByCustomer(req.params.customer_id, req.params.order_id);
-
-    const orderedOil = await ordersDataLayer
-        .getAllOrderedOilByCustomer(req.params.customer_id, req.params.order_id);
-
+router.post('/customerItems/:customer_id/:order_id', checkIfAuthenticated, async (req, res) => {
     try {
         const order = await ordersDataLayer.getCustomerOrderById(req.params.order_id);
         if (order) {
@@ -142,6 +134,38 @@ router.post('/customerItems/:customer_id/:order_id', async(req,res) => {
         res.send("Error updating status");
     }
 })
+
+// get order ID to remove
+router.get('/customerItems/:customer_id/:order_id/remove', checkIfAuthenticated, async (req, res) => {
+    const order = await ordersDataLayer.getCustomerOrderById(req.params.order_id);
+
+    const orderedDiffuser = await ordersDataLayer
+        .getAllOrderedDiffuserByCustomer(req.params.customer_id, req.params.order_id);
+    const orderedOil = await ordersDataLayer
+        .getAllOrderedOilByCustomer(req.params.customer_id, req.params.order_id);
+
+    // res.send({
+    //     'order': order,
+    //     'diffuser': orderedDiffuser,
+    //     'oil': orderedOil
+    // })
+
+    res.render('orders/delete', {
+        'order': order.toJSON(),
+        'diffuser': orderedDiffuser.toJSON(),
+        'oil': orderedOil.toJSON()
+    })
+})
+
+router.post('/customerItems/:customer_id/:order_id/remove',checkIfAuthenticated, async(req,res) => {
+    const order = await ordersDataLayer.getCustomerOrderById(req.params.order_id);
+    let orderId = order.get('id')
+    await order.destroy();
+    req.flash("success_messages", `Successfully deleted Order No. #${orderId}.`);
+    res.redirect('/orders')
+
+})
+
 
 module.exports = router;
 

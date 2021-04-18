@@ -10,8 +10,9 @@
         <li>Customer Mobile No.: +65 {{order.customers.mobile_no}}</li>
         <li>Customer Shipping Address.: {{order.street_name}} S({{order.postal_code}}) #{{order.unit_code}}
         </li>
-
     </ul>
+    <a href="/orders/customerItems/{{order.customers.id}}/{{order.id}}/remove" 
+    class="btn btn-danger btn-sm mt-2 mb-3">Delete Order</a>
     <h3>Customer Order Details</h3>
     <ul>
         <li>Ordered Date: {{order.order_date}}</li>

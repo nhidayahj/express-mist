@@ -1,0 +1,22 @@
+{{#extends 'base'}}
+{{#block 'title'}}Aroma Misty - Delete Order{{/block}}
+
+
+{{#block 'content'}}
+<div class="container">
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+        <div class="alert alert-danger">
+            <p>Are you sure you want to delete Customer Order No #{{order.id}}?</p>
+        </div>
+        <input type="submit" value="Confirm" class="btn btn-success" />
+
+        <a href="/orders/customerItems/{{order.customers.id}}/{{order.id}}" 
+        class="btn btn-danger">Cancel</a>
+    </form>
+</div>
+
+
+{{/block}}
+
+{{/extends}}

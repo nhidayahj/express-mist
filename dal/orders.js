@@ -16,6 +16,7 @@ const getCustomerOrderById = async(orderId) => {
     })
 }
 
+
 const getCustomerByEmail = async (customerEmail) => {
     const customer = await Member.where({
         'email':customerEmail
@@ -24,6 +25,18 @@ const getCustomerByEmail = async (customerEmail) => {
         withRelated:['orders']
     })
     return customer;
+}
+
+// latest order by the same customer
+const getLatestOrdersByCustomerId = async(customerId) => {
+    return await Orders.where({
+        'customer_id':customerId
+    }).query(function(order){
+        order.orderBy('id', 'DESC').limit(1)
+    }).fetch({
+        require:true,
+        withRelated:['customers'] 
+    })
 }
 
 const getAllOrderedDiffuserByCustomer = async(customerId, orderId) => {
@@ -52,19 +65,6 @@ const getAllOrderedOilByCustomer = async(customerId, orderId) => {
     }
 }
 
-
-
-// latest order by the same customer
-const getLatestOrdersByCustomerId = async(customerId) => {
-    return await Orders.where({
-        'customer_id':customerId
-    }).query(function(order){
-        order.orderBy('id', 'DESC').limit(1)
-    }).fetch({
-        require:true,
-        withRelated:['customers'] 
-    })
-}
 
 const getPaymentStatusByOrderId = async(orderId) => {
     const customer = await getCustomerOrderById(orderId)
