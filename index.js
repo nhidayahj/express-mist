@@ -13,10 +13,9 @@ let app = express();
 
 app.set("view engine", 'hbs')
 
-
-app.use(cors());
-app.use(express.static('public'))
+// app.use(cors());
 // app.use(express.static(__dirname + '/public'))
+app.use(express.static('public'))
 
 wax.on(hbs.handlebars);
 wax.setLayoutPath('./views/layouts')
@@ -43,6 +42,7 @@ app.use(function(req,res,next) {
     }
 })
 
+
 app.use(flash());
 app.use(function (req,res,next) {
     res.locals.success_messages = req.flash("success_messages");
@@ -65,6 +65,7 @@ app.use(function (req, res, next) {
     } 
     next()
 })
+
 
 // import in routes 
 const landingRoute = require('./routes/landing');

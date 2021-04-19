@@ -10,13 +10,23 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather&family=Nunito:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
+
+
     <title>{{#block 'title'}}{{/block}}</title>
 </head>
 
 <body>
+    <div class="sidebar">
+        <a class="active" href="/">Catalog</a>
+        <a href="/diffusers">Diffusers</a>
+        <a href="/oils">Essential Oils</a>
+        <a href="/orders">Orders</a>
+    </div>
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/">Products</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -67,7 +77,11 @@
         {{/if}}
 
     </div>
-    {{#block 'content'}}{{/block}}
+    <div class="content">
+        {{#block 'content'}}{{/block}}
+
+    </div>
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
