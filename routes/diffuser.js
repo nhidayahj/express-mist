@@ -17,7 +17,6 @@ router.get('/', async (req, res) => {
     allCategories.unshift([0, 'Choose a Category'])
     const allTags = await diffuserDataLayer.getAllTags();
 
-
     const searchDiffuser = searchDiffuserFields(allCategories, allTags)
 
     let queryDiffuser = Diffuser.collection();

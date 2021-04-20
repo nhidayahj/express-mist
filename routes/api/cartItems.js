@@ -42,9 +42,7 @@ router.get('/diffuser/:customer_id/:diffuser_id/addtocart', async(req,res) => {
         res.status(200);
         res.send({
             "success":"Successfully added diffuser to cart."
-            // "customer":newCartItem.get('customer_id'),
-            // "diffuser":newCartItem.get("diffuser_id"),
-            // "quantity":newCartItem.get('quantity')
+
         });
     } catch (e) {
         res.status(404);
@@ -99,9 +97,7 @@ router.get('/oil/:customer_id/:oil_id/addtocart', async(req,res) => {
         res.status(200);
         res.send({
             "success":"Successfully added oil to cart."
-            // "customer":newCartItem.get('customer_id'),
-            // "oil":newCartItem.get("oil_id"),
-            // "quantity":newCartItem.get('quantity')
+            
         })
     } catch (e) {
         res.status(404);

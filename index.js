@@ -13,7 +13,7 @@ let app = express();
 
 app.set("view engine", 'hbs')
 
-// app.use(cors());
+app.use(cors());
 // app.use(express.static(__dirname + '/public'))
 app.use(express.static('public'))
 
@@ -67,21 +67,19 @@ app.use(function (req, res, next) {
 })
 
 
-// import in routes 
+// routes 
 const landingRoute = require('./routes/landing');
 const diffuserRoute = require('./routes/diffuser');
 const oilsRoute = require('./routes/oils');
 const vendorRoute = require('./routes/vendor');
 const orderRoute = require('./routes/orders');
 
-
+// api routes
 const api = {
-    // 'diffusers':require('./routes/api/diffusers'),
-    // 'oils':require('./routes/api/oils'),
     'products':require('./routes/api/products'),
     'members':require('./routes/api/members'),
     'cartItems':require('./routes/api/cartItems'),
-    'orders':require('./routes/api/custShipAddress'),
+    // 'orders':require('./routes/api/custShipAddress'),
     'checkout':require('./routes/api/checkout'),
 }
 
@@ -95,12 +93,12 @@ async function main() {
     app.use('/api/members', express.json(), api.members)
     app.use('/api/products', express.json(), api.products)
     app.use('/api/shoppingCart', express.json(), api.cartItems)
-    app.use('/api/shipping', express.json(), api.orders)
+    // app.use('/api/shipping', express.json(), api.orders)
     app.use('/api/checkout', api.checkout)
 }
 
 main();
 
-app.listen('3000', () => {
+app.listen('3001', () => {
     console.log("server has started")
 })

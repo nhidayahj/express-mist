@@ -21,60 +21,78 @@ const getHashedPassword = (password) => {
 
 // register new customer/member
 router.post('/register', async (req, res) => {
-    const customer = new Member();
+    try {
+        let name = req.body.name;
+        let email = req.body.email;
+        let dob = req.body.dob;
+        let member_date = new Date();
+        let mobile_no = req.body.mobile_no;
+        let password = getHashedPassword(req.body.password);
 
-    let name = req.body.name;
-    let email = req.body.email;
-    let dob = req.body.dob;
-    let member_date = new Date();
-    let mobile_no = req.body.mobile_no;
-    let password = getHashedPassword(req.body.password);
+        const customer = new Member();
+        customer.set('name', name)
+        customer.set('dob', dob)
+        customer.set('member_date', member_date)
+        customer.set('email', email)
+        customer.set('mobile_no', mobile_no)
+        customer.set('password', password)
 
-    customer.set('name', name)
-    customer.set('dob', dob)
-    customer.set('member_date', member_date)
-    customer.set('email', email)
-    customer.set('mobile_no', mobile_no)
-    customer.set('password', password)
+        await customer.save();
+        res.status(200);
+        res.send("Member registered")
+    } catch (e) {
+        res.status(400);
+        res.send({
+            'error':"Invalid data"
+        })
+        console.log(e);
+    }
 
-    await customer.save();
-
-    res.send("Member registered")
 })
 
 router.post('/login', async (req, res) => {
     let customer = await Member.where({
         'email': req.body.email
     }).fetch({
-        require: false
+        require: true
     });
 
-    if (customer && customer.get('password') == getHashedPassword(req.body.password)) {
-        const customerObject = {
-            'name': customer.get('name'),
-            'email': customer.get('email'),
-            'id': customer.get('id'),
-            'dob': customer.get('dob')
-        }
-        let accessToken = generateAccessToken(
-            customerObject, process.env.TOKEN_SECRET, '15m');
-        let refreshToken = generateAccessToken(
-            customerObject, process.env.REFRESH_TOKEN_SECRET, '7d')
+    try {
+        if (customer && customer.get('password') == getHashedPassword(req.body.password)) {
+            const id = customer.get('id');
+            const customerObject = {
+                'name': customer.get('name'),
+                'email': customer.get('email'),
+                'id': customer.get('id'),
+                'dob': customer.get('dob')
+            }
+            let accessToken = generateAccessToken(
+                customerObject, process.env.TOKEN_SECRET, '15m');
+            let refreshToken = generateAccessToken(
+                customerObject, process.env.REFRESH_TOKEN_SECRET, '7d')
 
+            res.send({
+                // 'message':'Registered'
+                'accessToken': accessToken, 
+                'refreshToken': refreshToken, 
+                'id':id
+            })
+        }
+    } catch (e) {
+        res.sendStatus(401);
         res.send({
-            accessToken, refreshToken
+            'error': 'Incorrect login details'
         })
-    } else {
-        res.send({
-            'error': "Incorrect login details"
-        })
+        console.log(e);
     }
+
 })
 
 router.get('/profile', checkIfAuthenticatedJWT, async (req, res) => {
     const customer = req.user;
     res.send(customer);
 })
+
 
 router.post('/refresh', async (req, res) => {
     let refreshToken = req.body.refreshToken;
@@ -86,9 +104,9 @@ router.post('/refresh', async (req, res) => {
     }
 
     let blacklistedToken = await BlacklistedToken.where({
-        'token':refreshToken
+        'token': refreshToken
     }).fetch({
-        require:false
+        require: false
     })
 
     if (blacklistedToken) {
@@ -111,13 +129,13 @@ router.post('/refresh', async (req, res) => {
     })
 })
 
-router.post('/logout', async(req,res) => {
+router.post('/logout', async (req, res) => {
     let refreshToken = req.body.refreshToken;
-    if(!refreshToken) {
+    if (!refreshToken) {
         res.sendStatus(401);
     } else {
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async(err, user) => {
-            if(err) {
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+            if (err) {
                 return res.sendStatus(403);
             }
             const tokenBlacklist = new BlacklistedToken();
@@ -125,7 +143,7 @@ router.post('/logout', async(req,res) => {
             tokenBlacklist.set('date_created', new Date());
             await tokenBlacklist.save();
             res.send({
-                'message':"You've successfully logged out."
+                'message': "You've successfully logged out."
             })
         })
     }

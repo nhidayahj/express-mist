@@ -107,7 +107,7 @@
     let itemToSearch = document.querySelector("#itemSearch");
     let selectedItem;
 
-    itemToSearch.addEventListener('change', function () {
+    itemToSearch.addEventListener('click', function () {
         let selectedProduct = document.querySelector("#itemSearch").value;
         if (selectedProduct == "diffuser") {
             document.querySelector("#id_product_type").value = selectedProduct
