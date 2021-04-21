@@ -37,13 +37,10 @@ router.get('/diffuser/:customer_id/:diffuser_id/addtocart', async(req,res) => {
         let customer = await userDataLayer.getCustomer(req.params.customer_id);
         // then takes the customer's id
         let cartService = new DiffuserCartServices(customer.get('id'));
-        await cartService.diffuserAddToCart(req.params.diffuser_id);
+        let addedItem = await cartService.diffuserAddToCart(req.params.diffuser_id);
         
         res.status(200);
-        res.send({
-            "success":"Successfully added diffuser to cart."
-
-        });
+        res.send(addedItem);
     } catch (e) {
         res.status(404);
         res.send({

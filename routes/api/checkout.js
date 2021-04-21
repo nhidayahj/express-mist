@@ -49,25 +49,34 @@ router.get('/:customer_id/latest/orders', async (req, res) => {
 // when customer clicks on a decides to confirm the purchase
 // create an order instance for the vendor
 router.post('/:customer_id/latest/orders', express.json(), async (req, res) => {
-    let customerOrder = new Orders();
+    try {
+        let customerOrder = new Orders();
 
-    let customer_id = req.params.customer_id;
-    let streetName = req.body.street_name;
-    let postalCode = req.body.postal_code;
-    let unitCode = req.body.unit_code;
+        let customer_id = req.params.customer_id;
+        let streetName = req.body.street_name;
+        let postalCode = req.body.postal_code;
+        let unitCode = req.body.unit_code;
 
-    customerOrder.set('customer_id', customer_id),
-        customerOrder.set('street_name', streetName),
-        customerOrder.set('postal_code', postalCode),
-        customerOrder.set('unit_code', unitCode),
-        customerOrder.set('amount', 0),
-        customerOrder.set('payment_status', 'unpaid'),
-        customerOrder.set('order_status', 'pending'),
-        customerOrder.set('payment_type', 'card')
-    customerOrder.set('order_date', new Date())
+        customerOrder.set('customer_id', customer_id),
+            customerOrder.set('street_name', streetName),
+            customerOrder.set('postal_code', postalCode),
+            customerOrder.set('unit_code', unitCode),
+            customerOrder.set('amount', 0),
+            customerOrder.set('payment_status', 'unpaid'),
+            customerOrder.set('order_status', 'pending'),
+            customerOrder.set('payment_type', 'card')
+        customerOrder.set('order_date', new Date())
 
-    await customerOrder.save();
-    res.send("Successfully added shipping order address");
+        await customerOrder.save();
+        res.status(200);
+        res.send("Successfully added shipping order address");
+    } catch (e) {
+        res.status(404);
+        res.send({
+            'error':"Shipping details ot captured. Please check all fields."
+        })
+    }
+
 })
 
 // create an instance of all diffuser/oil products from customers' cart
@@ -79,7 +88,7 @@ router.get('/:customer_id/orders', async (req, res) => {
         let allCustDiffusers = await cartDataLayer.getAllDiffusers(req.params.customer_id);
         let allCustOils = await cartDataLayer.getAllOils(req.params.customer_id);
         let orderItemByCustomer = await orderDataLayer.getLatestOrdersByCustomerId(req.params.customer_id);
-        
+
         if (orderItemByCustomer) {
             console.log("CUstomer exists")
             if (allCustDiffusers.length > 0) {
@@ -198,46 +207,46 @@ router.get('/:customer_id/confirm', async (req, res) => {
     let stripeSession = await stripe.checkout.sessions.create(payment);
 
     res.render('checkout/checkout', {
-        'sessionId':stripeSession.id,
-        'publishableKey':process.env.STRIPE_PUBLISHABLE_KEY
+        'sessionId': stripeSession.id,
+        'publishableKey': process.env.STRIPE_PUBLISHABLE_KEY
     })
 
 })
 
-router.post('/process_payment', bodyParser.raw({type:'application/json'}), 
-    async(req,res) => {
-    let payload = req.body;
-    
-    let endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
-    let signHeader = req.headers['stripe-signature'];
-    let event; 
-    try {
-        event = stripe.webhooks.constructEvent(payload, signHeader, endpointSecret);
-    } catch (e) {
-        res.send({
-            'error':e.message
-        });
-        console.log(e.message)
-    }
-    
-    if (event.type == 'checkout.session.completed'){
-        // here you put in your transaction data (customizing UI) 
-        // when there is complete transaction
-        const stripeInfo = event.data.object;
-        console.log("Stripe info: " ,stripeInfo);
-        let customerEmail = stripeInfo.customer_details.email;
-        const customerId = await orderDataLayer.getCustomerByEmail(customerEmail);
-        console.log(customerId.toJSON());
-        if(customerId) {
-            return await orderDataLayer
-                .updatePaymentOrderStatus(customerId.get('id'), stripeInfo.payment_status, stripeInfo.amount_total)
+router.post('/process_payment', bodyParser.raw({ type: 'application/json' }),
+    async (req, res) => {
+        let payload = req.body;
+
+        let endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
+        let signHeader = req.headers['stripe-signature'];
+        let event;
+        try {
+            event = stripe.webhooks.constructEvent(payload, signHeader, endpointSecret);
+        } catch (e) {
+            res.send({
+                'error': e.message
+            });
+            console.log(e.message)
         }
-        // let ordersId = event.data.object.metadata.orders
-        
-        // const updateOrders = await orderDataLayer.getLatestOrdersByCustomerId()
-    }
-    res.sendStatus(200)
-})
+
+        if (event.type == 'checkout.session.completed') {
+            // here you put in your transaction data (customizing UI) 
+            // when there is complete transaction
+            const stripeInfo = event.data.object;
+            console.log("Stripe info: ", stripeInfo);
+            let customerEmail = stripeInfo.customer_details.email;
+            const customerId = await orderDataLayer.getCustomerByEmail(customerEmail);
+            console.log(customerId.toJSON());
+            if (customerId) {
+                return await orderDataLayer
+                    .updatePaymentOrderStatus(customerId.get('id'), stripeInfo.payment_status, stripeInfo.amount_total)
+            }
+            // let ordersId = event.data.object.metadata.orders
+
+            // const updateOrders = await orderDataLayer.getLatestOrdersByCustomerId()
+        }
+        res.sendStatus(200)
+    })
 
 
 
