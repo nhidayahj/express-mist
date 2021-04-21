@@ -72,10 +72,12 @@ router.post('/login', async (req, res) => {
                 customerObject, process.env.REFRESH_TOKEN_SECRET, '7d')
 
             res.send({
-                // 'message':'Registered'
+    
                 'accessToken': accessToken, 
                 'refreshToken': refreshToken, 
-                'id':id
+                'id':id,
+                'name':customerObject.name,
+                'email':customerObject.email
             })
         }
     } catch (e) {

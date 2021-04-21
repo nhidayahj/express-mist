@@ -18,7 +18,7 @@ router.get('/:customer_id', async(req,res)=>{
         let allOils = await cartDataLayer.getAllOils(customer.get('id'));
         res.status(200);
         res.send({
-            "diffuser":allDiffusers,
+            "diffusers":allDiffusers,
             "oils":allOils
         });
     } catch (e) {
