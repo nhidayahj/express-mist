@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const { checkIfAuthenticatedJWT } = require('../../middleware')
 const { Member, BlacklistedToken } = require('../../models/diffusers');
-const memberDataLayer = require('../../dal/cart')
+const memberDataLayer = require('../../dal/users')
 
 const generateAccessToken = (user, secret, expiresIn) => {
     return jwt.sign(user, secret, {
@@ -12,12 +12,30 @@ const generateAccessToken = (user, secret, expiresIn) => {
     })
 }
 
-
 const getHashedPassword = (password) => {
     const sha256 = crypto.createHash('sha256');
     const hash = sha256.update(password).digest('base64');
     return hash;
 }
+
+router.post('/info/:customer_id/update', async(req,res) => {
+    try {
+        let customer = await memberDataLayer.getCustomer(req.params.customer_id);
+        if (customer) {
+            customer.set('name', req.body.name);
+            customer.set('email', req.body.email);
+            customer.set('mobile_no', req.body.mobile);
+            await customer.save()
+            res.status(200);
+            res.send("Customer info updated")
+        } 
+    } catch (e) {
+        res.status(404);
+        res.send("Customer not found")
+    }
+})
+
+
 
 // register new customer/member
 router.post('/register', async (req, res) => {
@@ -39,7 +57,8 @@ router.post('/register', async (req, res) => {
 
         await customer.save();
         res.status(200);
-        res.send("Member registered")
+        // res.send("Member registered")
+        res.send(customer)
     } catch (e) {
         res.status(400);
         res.send({
@@ -54,34 +73,42 @@ router.post('/login', async (req, res) => {
     let customer = await Member.where({
         'email': req.body.email
     }).fetch({
-        require: true
+        require: false
     });
 
     try {
+        if(!customer) {
+            res.status(404);
+            res.send("Error fetching login credentials. Sign up an account.")
+        }
         if (customer && customer.get('password') == getHashedPassword(req.body.password)) {
             const id = customer.get('id');
             const customerObject = {
                 'name': customer.get('name'),
                 'email': customer.get('email'),
                 'id': customer.get('id'),
-                'dob': customer.get('dob')
+                'dob': customer.get('dob'),
+                'mobile_no': customer.get('mobile_no')
             }
             let accessToken = generateAccessToken(
                 customerObject, process.env.TOKEN_SECRET, '15m');
             let refreshToken = generateAccessToken(
-                customerObject, process.env.REFRESH_TOKEN_SECRET, '7d')
-
+                customerObject, process.env.REFRESH_TOKEN_SECRET, '7d');
+            res.status(200);
             res.send({
-    
                 'accessToken': accessToken, 
                 'refreshToken': refreshToken, 
                 'id':id,
                 'name':customerObject.name,
-                'email':customerObject.email
+                'email':customerObject.email,
+                'mobile_no':customerObject.mobile_no
             })
+        } else if (customer && customer.get('password') !== getHashedPassword(req.body.password)) {
+            res.status(404);
+            res.send("Email or password is incorrect. Please try again.")
         }
     } catch (e) {
-        res.sendStatus(401);
+        res.status(401);
         res.send({
             'error': 'Incorrect login details'
         })
