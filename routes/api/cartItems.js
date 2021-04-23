@@ -56,9 +56,9 @@ router.get('/diffuser/:customer_id/:diffuser_id/:newQuantity/update', async(req,
         let customer = await userDataLayer.getCustomer(req.params.customer_id);
         // then takes the customer's id
         let cartServices = new DiffuserCartServices(customer.get('id'));
-        await cartServices.diffuserUpdateQuantity(req.params.diffuser_id, req.params.newQuantity);
+        let newQty = await cartServices.diffuserUpdateQuantity(req.params.diffuser_id, req.params.newQuantity);
         res.status(200);
-        res.send("Diffuser quantity has been updated")
+        res.send(newQty)
     } catch (e) {
         res.status(404);
         res.send({

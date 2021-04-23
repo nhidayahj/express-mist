@@ -90,9 +90,9 @@ router.get('/:customer_id/orders', async (req, res) => {
         let orderItemByCustomer = await orderDataLayer.getLatestOrdersByCustomerId(req.params.customer_id);
 
         if (orderItemByCustomer) {
-            console.log("CUstomer exists")
+            // console.log("CUstomer exists")
             if (allCustDiffusers.length > 0) {
-                console.log("customer purchased diffusers");
+                // console.log("customer purchased diffusers");
                 for (let diffuser of allCustDiffusers) {
                     // console.log(diffuser)
                     let diffuserOrderItem = new Order_Diffuser();
@@ -103,7 +103,7 @@ router.get('/:customer_id/orders', async (req, res) => {
                 }
             }
             if (allCustOils.length > 0) {
-                console.log("Customer purchased oils");
+                // console.log("Customer purchased oils");
                 for (let oil of allCustOils) {
                     let oilOrderItem = new Order_Oil();
                     oilOrderItem.set('oil_id', oil.get('oil_id'));
@@ -113,8 +113,11 @@ router.get('/:customer_id/orders', async (req, res) => {
                 };
             }
             res.status(200);
-            console.log(allCustDiffusers.toJSON(), allCustOils.toJSON())
-            res.send("OK")
+            // console.log(allCustDiffusers.toJSON(), allCustOils.toJSON())
+            res.send({
+                'diffusers':allCustDiffusers.toJSON(),
+                'oils':allCustOils.toJSON()
+            })
         }
     } catch (e) {
         res.status(404);
@@ -126,7 +129,6 @@ router.get('/:customer_id/orders', async (req, res) => {
 
 // last stage to redirect to Stripes'
 // this route will show the Stripes checkout page
-// see parallel lab: link checkout/checkout
 router.get('/:customer_id/confirm', async (req, res) => {
     let allDiffusers, allOils;
     const customer = await customerDataLayer.getCustomer(req.params.customer_id);
@@ -136,10 +138,6 @@ router.get('/:customer_id/confirm', async (req, res) => {
     const oilService = new oilCartServices(customer.get('id'));
     allOils = await oilService.getAllOils()
 
-    // res.send({
-    //     "diffuserItems": allDiffusers,
-    //     "oilItems": allOils
-    // })
 
     let lineItems = [];
     let meta = [];
@@ -190,7 +188,6 @@ router.get('/:customer_id/confirm', async (req, res) => {
     console.log("meta: ", meta)
 
 
-    // META DATA should incude customer identification
     let metaJSON = JSON.stringify(meta);
 
     const payment = {
@@ -230,8 +227,7 @@ router.post('/process_payment', bodyParser.raw({ type: 'application/json' }),
         }
 
         if (event.type == 'checkout.session.completed') {
-            // here you put in your transaction data (customizing UI) 
-            // when there is complete transaction
+            
             const stripeInfo = event.data.object;
             console.log("Stripe info: ", stripeInfo);
             let customerEmail = stripeInfo.customer_details.email;
