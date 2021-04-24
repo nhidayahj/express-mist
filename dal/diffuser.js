@@ -43,5 +43,38 @@ const getDiffuserByCategory = async(categoryId) => {
     return diffuserCat;
 }
 
+const getDiffByLT = async(range) => {
+    const diffPrice = await Diffuser.collection()
+        .query('where', 'cost', '<=', parseInt(range))
+        .fetch({
+            require:false,
+            withRelated:['category', 'tags']
+        })
+    return diffPrice
+}
+
+const getDiffByMT = async(range) => {
+    const diffPrice = await Diffuser.collection()
+        .query('where', 'cost', '>=', parseInt(range))
+        .fetch({
+            require:false,
+            withRelated:['category', 'tags']
+        })
+    return diffPrice
+}
+
+// const getDiffByPriceRange = async(range) => {
+//     const diffPrice = await Diffuser.query({
+//         where:{'cost': parseInt(range)}
+//     }).fetchAll({
+//         require:false,
+//         withRelated:['category', 'tags']
+//     })
+//     return diffPrice;
+// }
+
+
+
 module.exports = {getAllDiffuser,getDiffuserById,
-                getAllCategory, getAllTags,getDiffuserByCategory}
+                getAllCategory, getAllTags,getDiffuserByCategory
+                ,getDiffByLT, getDiffByMT}

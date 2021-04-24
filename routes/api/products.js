@@ -22,4 +22,16 @@ router.get('/diffuser/category/:category_id', async (req, res) => {
 
 })
 
+router.get('/diffuser/low/:cost', async(req,res) => {
+    const diffuser = await diffuserDataLayer
+        .getDiffByLT(req.params.cost);
+        res.send(diffuser)
+})
+
+router.get('/diffuser/mid/:cost', async(req,res) => {
+     const diffuser = await diffuserDataLayer
+        .getDiffByMT(req.params.cost);
+        res.send(diffuser)
+})
+
 module.exports = router;
