@@ -18,7 +18,7 @@ const getHashedPassword = (password) => {
     return hash;
 }
 
-router.post('/info/:customer_id/update', async(req,res) => {
+router.post('/info/:customer_id/update', async (req, res) => {
     try {
         let customer = await memberDataLayer.getCustomer(req.params.customer_id);
         if (customer) {
@@ -28,7 +28,7 @@ router.post('/info/:customer_id/update', async(req,res) => {
             await customer.save()
             res.status(200);
             res.send("Customer info updated")
-        } 
+        }
     } catch (e) {
         res.status(404);
         res.send("Customer not found")
@@ -62,7 +62,7 @@ router.post('/register', async (req, res) => {
     } catch (e) {
         res.status(400);
         res.send({
-            'error':"Invalid data"
+            'error': "Invalid data"
         })
         console.log(e);
     }
@@ -76,44 +76,70 @@ router.post('/login', async (req, res) => {
         require: false
     });
 
-    try {
-        if(!customer) {
-            res.status(404);
-            res.send("Error fetching login credentials. Sign up an account.")
+    if (customer && customer.get('password') == getHashedPassword(req.body.password)) {
+        const id = customer.get('id');
+        const customerObject = {
+            'name': customer.get('name'),
+            'email': customer.get('email'),
+            'id': customer.get('id'),
+            'dob': customer.get('dob'),
+            'mobile_no': customer.get('mobile_no')
         }
-        if (customer && customer.get('password') == getHashedPassword(req.body.password)) {
-            const id = customer.get('id');
-            const customerObject = {
-                'name': customer.get('name'),
-                'email': customer.get('email'),
-                'id': customer.get('id'),
-                'dob': customer.get('dob'),
-                'mobile_no': customer.get('mobile_no')
-            }
-            let accessToken = generateAccessToken(
-                customerObject, process.env.TOKEN_SECRET, '15m');
-            let refreshToken = generateAccessToken(
-                customerObject, process.env.REFRESH_TOKEN_SECRET, '7d');
-            res.status(200);
-            res.send({
-                'accessToken': accessToken, 
-                'refreshToken': refreshToken, 
-                'id':id,
-                'name':customerObject.name,
-                'email':customerObject.email,
-                'mobile_no':customerObject.mobile_no
-            })
-        } else if (customer && customer.get('password') !== getHashedPassword(req.body.password)) {
-            res.status(404);
-            res.send("Email or password is incorrect. Please try again.")
-        }
-    } catch (e) {
-        res.status(401);
+        let accessToken = generateAccessToken(
+            customerObject, process.env.TOKEN_SECRET, '15m');
+        let refreshToken = generateAccessToken(
+            customerObject, process.env.REFRESH_TOKEN_SECRET, '7d');
+        res.status(200);
         res.send({
-            'error': 'Incorrect login details'
+            'accessToken': accessToken,
+            'refreshToken': refreshToken,
+            'id': id,
+            'name': customerObject.name,
+            'email': customerObject.email,
+            'mobile_no': customerObject.mobile_no
         })
-        console.log(e);
+    } else {
+        res.status(404);
+        res.send("Email or password is incorrect. Please try again.")
     }
+    // try {
+    //     if(!customer) {
+    //         res.status(404);
+    //         res.send("Error fetching login credentials. Sign up an account.")
+    //     }
+    //     if (customer && customer.get('password') == getHashedPassword(req.body.password)) {
+    //         const id = customer.get('id');
+    //         const customerObject = {
+    //             'name': customer.get('name'),
+    //             'email': customer.get('email'),
+    //             'id': customer.get('id'),
+    //             'dob': customer.get('dob'),
+    //             'mobile_no': customer.get('mobile_no')
+    //         }
+    //         let accessToken = generateAccessToken(
+    //             customerObject, process.env.TOKEN_SECRET, '15m');
+    //         let refreshToken = generateAccessToken(
+    //             customerObject, process.env.REFRESH_TOKEN_SECRET, '7d');
+    //         res.status(200);
+    //         res.send({
+    //             'accessToken': accessToken, 
+    //             'refreshToken': refreshToken, 
+    //             'id':id,
+    //             'name':customerObject.name,
+    //             'email':customerObject.email,
+    //             'mobile_no':customerObject.mobile_no
+    //         })
+    //     } else if (customer && customer.get('password') !== getHashedPassword(req.body.password)) {
+    //         res.status(404);
+    //         res.send("Email or password is incorrect. Please try again.")
+    //     }
+    // } catch (e) {
+    //     res.status(401);
+    //     res.send({
+    //         'error': 'Incorrect login details'
+    //     })
+    //     console.log(e);
+    // }
 
 })
 

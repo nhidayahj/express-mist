@@ -32,5 +32,16 @@ const getDiffuserById = async(diffuserId) => {
     return diffuser;
 }
 
+const getDiffuserByCategory = async(categoryId) => {
+    const diffuserCat = await Diffuser
+        .where({
+            'category_id':categoryId
+        }).fetch({
+            require:false,
+            withRelated:['category', 'tags']
+        })
+    return diffuserCat;
+}
+
 module.exports = {getAllDiffuser,getDiffuserById,
-                getAllCategory, getAllTags}
+                getAllCategory, getAllTags,getDiffuserByCategory}
