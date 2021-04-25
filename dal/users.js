@@ -23,9 +23,17 @@ const getCustomer = async(customerId) => {
     return customer;
 }
 
-// const updateCustomer = async(customerId)
+const getCustomerByEmail = async(custEmail) => {
+    const customer = await Member.where({
+        email:custEmail
+    }).fetch({
+        require:false,
+    })
+    return customer;
+}
 
 
 
 
-module.exports = {getAllRoles, getAllVendors, getCustomer}
+module.exports = {getAllRoles, getAllVendors, getCustomer
+                ,getCustomerByEmail}

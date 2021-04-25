@@ -10,6 +10,17 @@ router.get('/oils', async (req, res) => {
     res.send(allOils.toJSON());
 })
 
+router.get('/oil/size/:size', async(req, res) => {
+    const size = await oilDataLayer.getIndivSize(req.params.size);
+    res.send(size)
+})
+
+router.get('/oil/:name', async(req,res) => {
+   
+    const oil = await oilDataLayer.getOilByName(req.params.name);
+    
+    res.send(oil);
+})
 
 router.get('/diffusers', async (req, res) => {
     const allDiffusers = await diffuserDataLayer.getAllDiffuser();
@@ -33,5 +44,7 @@ router.get('/diffuser/mid/:cost', async(req,res) => {
         .getDiffByMT(req.params.cost);
         res.send(diffuser)
 })
+
+
 
 module.exports = router;

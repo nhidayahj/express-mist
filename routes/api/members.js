@@ -19,27 +19,27 @@ const getHashedPassword = (password) => {
 }
 
 router.post('/info/:customer_id/update', async (req, res) => {
-    try {
         let customer = await memberDataLayer.getCustomer(req.params.customer_id);
         if (customer) {
             customer.set('name', req.body.name);
             customer.set('email', req.body.email);
-            customer.set('mobile_no', req.body.mobile);
+            customer.set('mobile_no', req.body.mobile_no);
             await customer.save()
             res.status(200);
             res.send("Customer info updated")
         }
-    } catch (e) {
-        res.status(404);
-        res.send("Customer not found")
-    }
+        else {
+            res.status(401);
+            res.send("Customer does not exists")
+        }
+    
 })
 
 
 
 // register new customer/member
 router.post('/register', async (req, res) => {
-    try {
+
         let name = req.body.name;
         let email = req.body.email;
         let dob = req.body.dob;
@@ -47,25 +47,27 @@ router.post('/register', async (req, res) => {
         let mobile_no = req.body.mobile_no;
         let password = getHashedPassword(req.body.password);
 
-        const customer = new Member();
-        customer.set('name', name)
-        customer.set('dob', dob)
-        customer.set('member_date', member_date)
-        customer.set('email', email)
-        customer.set('mobile_no', mobile_no)
-        customer.set('password', password)
+        let customerExist = await memberDataLayer.getCustomerByEmail(email);
+        if (customerExist) {
+            res.status(401);
+            res.send(customerExist);
+        } else {
 
-        await customer.save();
-        res.status(200);
-        // res.send("Member registered")
-        res.send(customer)
-    } catch (e) {
-        res.status(400);
-        res.send({
-            'error': "Invalid data"
-        })
-        console.log(e);
-    }
+            const customer = new Member();
+            customer.set('name', name)
+            customer.set('dob', dob)
+            customer.set('member_date', member_date)
+            customer.set('email', email)
+            customer.set('mobile_no', mobile_no)
+            customer.set('password', password)
+
+            await customer.save();
+            res.status(200);
+            // res.send("Member registered")
+            res.send(customer)
+        }
+    
+    
 
 })
 
@@ -99,7 +101,7 @@ router.post('/login', async (req, res) => {
             'mobile_no': customerObject.mobile_no
         })
     } else {
-        res.status(404);
+        res.status(401);
         res.send("Email or password is incorrect. Please try again.")
     }
     // try {

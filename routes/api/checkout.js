@@ -35,15 +35,26 @@ router.get('/:customer_id', async (req, res) => {
 
 // get customer's lateest orders
 router.get('/:customer_id/latest/orders', async (req, res) => {
-    // to include oil items as well
-    try {
-        let custLatestOrder = await orderDataLayer.getLatestOrdersByCustomerId(req.params.customer_id);
+    let custLatestOrder = await orderDataLayer
+        .getLatestOrdersByCustomerId(req.params.customer_id);
+
+    // check if order payment is made
+    if (custLatestOrder.get('payment_status') == 'paid') {
+        res.status(401);
+        res.send("Payment is made")
+    } else if (custLatestOrder.get('payment_status') == 'unpaid') {
         res.status(200);
         res.send(custLatestOrder)
-    } catch (e) {
-        res.status(404);
-        res.send("Latest order not found")
     }
+
+    // try {
+    //     let custLatestOrder = await orderDataLayer.getLatestOrdersByCustomerId(req.params.customer_id);
+    //     res.status(200);
+    //     res.send(custLatestOrder)
+    // } catch (e) {
+    //     res.status(404);
+    //     res.send("Latest order not found")
+    // }
 })
 
 // when customer clicks on a decides to confirm the purchase
@@ -73,7 +84,7 @@ router.post('/:customer_id/latest/orders', express.json(), async (req, res) => {
     } catch (e) {
         res.status(404);
         res.send({
-            'error':"Shipping details ot captured. Please check all fields."
+            'error': "Shipping details ot captured. Please check all fields."
         })
     }
 
@@ -115,8 +126,8 @@ router.get('/:customer_id/orders', async (req, res) => {
             res.status(200);
             // console.log(allCustDiffusers.toJSON(), allCustOils.toJSON())
             res.send({
-                'diffusers':allCustDiffusers.toJSON(),
-                'oils':allCustOils.toJSON()
+                'diffusers': allCustDiffusers.toJSON(),
+                'oils': allCustOils.toJSON()
             })
         }
     } catch (e) {
@@ -227,7 +238,7 @@ router.post('/process_payment', bodyParser.raw({ type: 'application/json' }),
         }
 
         if (event.type == 'checkout.session.completed') {
-            
+
             const stripeInfo = event.data.object;
             console.log("Stripe info: ", stripeInfo);
             let customerEmail = stripeInfo.customer_details.email;
