@@ -36,7 +36,7 @@ const getDiffuserByCategory = async(categoryId) => {
     const diffuserCat = await Diffuser
         .where({
             'category_id':categoryId
-        }).fetch({
+        }).fetchAll({
             require:false,
             withRelated:['category', 'tags']
         })
