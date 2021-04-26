@@ -10,10 +10,10 @@ const csrf = require('csurf');
 const cors = require('cors');
 
 let app = express();
+app.use(cors());
 
 app.set("view engine", 'hbs')
 
-app.use(cors());
 // app.use(express.static(__dirname + '/public'))
 app.use(express.static('public'))
 
@@ -99,6 +99,6 @@ async function main() {
 
 main();
 
-app.listen('3001', () => {
+app.listen('3002', () => {
     console.log("server has started")
 })

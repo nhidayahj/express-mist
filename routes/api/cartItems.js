@@ -32,22 +32,33 @@ router.get('/:customer_id', async(req,res)=>{
 
 // customer to add diffuser into their own shopping cart
 router.get('/diffuser/:customer_id/:diffuser_id/addtocart', async(req,res) => {
-    try {
-        // checks if customer is registered
-        let customer = await userDataLayer.getCustomer(req.params.customer_id);
+    let customer = await userDataLayer.getCustomer(req.params.customer_id);
         // then takes the customer's id
         let cartService = new DiffuserCartServices(customer.get('id'));
         let addedItem = await cartService.diffuserAddToCart(req.params.diffuser_id);
         
         res.status(200);
         res.send(addedItem);
-    } catch (e) {
-        res.status(404);
-        res.send({
-            'error':"Trouble adding diffuser to cart. Either customer or product not found"
-        });
-        console.log(e)
-    }
+
+
+
+
+    // try {
+    //     // checks if customer is registered
+    //     let customer = await userDataLayer.getCustomer(req.params.customer_id);
+    //     // then takes the customer's id
+    //     let cartService = new DiffuserCartServices(customer.get('id'));
+    //     let addedItem = await cartService.diffuserAddToCart(req.params.diffuser_id);
+        
+    //     res.status(200);
+    //     res.send(addedItem);
+    // } catch (e) {
+    //     res.status(404);
+    //     res.send({
+    //         'error':"Trouble adding diffuser to cart. Either customer or product not found"
+    //     });
+    //     console.log(e)
+    // }
 })
 
 router.get('/diffuser/:customer_id/:diffuser_id/:newQuantity/update', async(req,res) => {
