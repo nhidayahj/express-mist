@@ -99,6 +99,6 @@ async function main() {
 
 main();
 
-app.listen('3002', () => {
+app.listen(process.env.PORT, () => {
     console.log("server has started")
 })
