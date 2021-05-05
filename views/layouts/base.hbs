@@ -20,6 +20,20 @@
 </head>
 
 <body>
+    <div>
+        {{#if success_messages}}
+        {{#each success_messages}}
+        <div class="alert alert-success">{{this}}</div>
+        {{/each}}
+        {{/if}}
+
+        {{#if error_messages}}
+        {{#each error_messages}}
+        <div class="alert alert-danger">{{this}}</div>
+        {{/each}}
+        {{/if}}
+
+    </div>
     <div class="sidebar">
         <a class="active" href="/">Catalog</a>
         <a href="/diffusers">Diffusers</a>
@@ -34,11 +48,17 @@
             <span class="navbar-toggler-icon"></span>
         </button> --}}
 
+    
 
     <ul class="nav justify-content-end">
         <li class="nav-item ml-4">
             {{!-- <a class="btn btn-primary btn-sm ml-4" href="/vendor/login">Login</a> --}}
-            <a class="nav-link active" href="/vendor/login">Login</a>
+            <a class="nav-link" href="/vendor/register">Register</a>
+            {{#if user}}
+             <a class="nav-link" href="/vendor/logout">Logout</a>
+             {{else}}
+            <a class="nav-link" href="/vendor/login">Login</a>
+            {{/if}}
         </li>
 
         {{!-- <div>
@@ -59,20 +79,7 @@
 
 
 
-    <div class="container">
-        {{#if success_messages}}
-        {{#each success_messages}}
-        <div class="alert alert-success">{{this}}</div>
-        {{/each}}
-        {{/if}}
-
-        {{#if error_messages}}
-        {{#each error_messages}}
-        <div class="alert alert-danger">{{this}}</div>
-        {{/each}}
-        {{/if}}
-
-    </div>
+    
     <div class="content">
         {{#block 'content'}}{{/block}}
 
