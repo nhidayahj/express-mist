@@ -45,6 +45,12 @@ router.get('/diffuser/mid/:cost', async(req,res) => {
         res.send(diffuser)
 })
 
+router.get('/diffuser/range/:cost', async(req,res) => {
+    const diffuser = await diffuserDataLayer
+        .getDiffByMidRange(req.params.cost);
+        res.send(diffuser)
+})
+
 
 
 module.exports = router;

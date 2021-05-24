@@ -63,7 +63,17 @@ const getDiffByMT = async(range) => {
     return diffPrice
 }
 
+const getDiffByMidRange = async(range) => {
+    const diffPrice = await Diffuser.collection()
+        .query('where', 'cost', 'BETWEEN', 0, 'AND', parseInt(range))
+        .fetch({
+            require:false,
+            withRelated:['category', 'tags']
+        })
+    return diffPrice
+}
+
 
 module.exports = {getAllDiffuser,getDiffuserById,
                 getAllCategory, getAllTags,getDiffuserByCategory
-                ,getDiffByLT, getDiffByMT}
+                ,getDiffByLT, getDiffByMT, getDiffByMidRange}
