@@ -10,10 +10,10 @@ router.get('/oils', async (req, res) => {
     res.send(allOils.toJSON());
 })
 
-router.get('/oil/size/:size', async(req, res) => {
-    const size = await oilDataLayer.getIndivSize(req.params.size);
-    res.send(size)
-})
+// router.get('/oil/size/:size', async(req, res) => {
+//     const size = await oilDataLayer.getIndivSize(req.params.size);
+//     res.send(size)
+// })
 
 router.get('/oil/:name', async(req,res) => {
    
