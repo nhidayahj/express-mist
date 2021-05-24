@@ -42,16 +42,35 @@ const getIndivSize = async (volumeId) => {
     return size
 }
 
+// const getOilByName = async (name) => {
+//     const oil = await Oils.where({
+//         name: name, '%'
+//     }).fetchAll({
+//         require: false,
+//         withRelated: ['sizes', 'tags']
+//     })
+//     return oil;
+// }
+
 const getOilByName = async (name) => {
-    const oil = await Oils.where({
-        name: name, '%'
-    }).fetchAll({
-        require: false,
-        withRelated: ['sizes', 'tags']
+    const oil = await Oils.collection()
+    .query('where', 'name', 'LIKE', name, '%')
+    .fetch({
+        require:false,
+        withRelated:['sizes', 'tags']
     })
     return oil;
 }
 
+// const getDiffByLT = async(range) => {
+//     const diffPrice = await Diffuser.collection()
+//         .query('where', 'cost', '<=', parseInt(range))
+//         .fetch({
+//             require:false,
+//             withRelated:['category', 'tags']
+//         })
+//     return diffPrice
+// }
 
 
 module.exports = {
