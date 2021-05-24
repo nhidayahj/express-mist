@@ -54,7 +54,7 @@ const getIndivSize = async (volumeId) => {
 
 const getOilByName = async (name) => {
     const oil = await Oils.collection()
-    .query('where', 'name', 'LIKE', name, '%')
+    .query('where', 'name', 'LIKE', name)
     .fetch({
         require:false,
         withRelated:['sizes', 'tags']
