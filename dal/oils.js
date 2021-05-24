@@ -32,15 +32,15 @@ const getAllTags = async () => {
     return allTags;
 }
 
-// const getIndivSize = async (volumeId) => {
-//     const size = await Sizes.where({
-//         id: volumeId
-//     }).fetch({
-//         require: false,
-//         withRelated: ['oils']
-//     })
-//     return size
-// }
+const getIndivSize = async (volumeId) => {
+    const size = await Sizes.where({
+        id: volumeId
+    }).fetch({
+        require: false,
+        withRelated: ['oils']
+    })
+    return size
+}
 
 const getOilByName = async (name) => {
     const oil = await Oils.collection()
