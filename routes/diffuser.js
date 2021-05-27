@@ -64,11 +64,11 @@ router.get('/', async (req, res) => {
             }
 
             if(form.data.min_stock) {
-                queryDiffuser = queryDiffuser.where('cost', '>=', form.data.min_stock)
+                queryDiffuser = queryDiffuser.where('cost', '>=', parseInt(form.data.min_stock))
             }
 
             if(form.data.max_stock) {
-                queryDiffuser = queryDiffuser.where('cost', '<=', form.data.max_stock)
+                queryDiffuser = queryDiffuser.where('cost', '<=', parseInt(form.data.max_stock))
             }
 
             // if(form.data.tags) {
