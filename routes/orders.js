@@ -15,13 +15,13 @@ router.get('/', async (req, res) => {
     let orderOil = await Order_Oil.collection();
     
     let pay_status_table = {
-        '0':'Unpaid',
-        '1':'Paid'
+        'unpaid':'Unpaid',
+        'paid':'Paid'
     }
     
     let order_status_table = {
-        '0': 'In-Transit',
-        '1':'Completed'
+        'In-Transit': 'In-Transit',
+        'Completed':'Completed'
     }
     const orderFormFields = orderSearchFields(pay_status_table, order_status_table);
     
