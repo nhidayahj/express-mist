@@ -60,15 +60,20 @@ router.get('/', async (req, res) => {
             if(form.data.category_id !== '0') {
                 queryDiffuser = queryDiffuser
                     .query('join', 'diffuser_category', 'category_id', 'diffuser_category.id')
-                    .where('diffuser_category.id', 'like', '%' + parseInt(form.data.category_id) + '%')
+                    .where('diffuser_category.id', '=', parseInt(form.data.category_id))
             }
+            // if(form.data.category_id !== '0') {
+            //     queryDiffuser = queryDiffuser
+            //         .query('join', 'diffuser_category', 'category_id', 'diffuser_category.id')
+            //         .where('diffuser_category.id', 'like', '%' + parseInt(form.data.category_id) + '%')
+            // }
 
             if(form.data.min_stock) {
-                queryDiffuser = queryDiffuser.where('cost', '>=', parseInt(form.data.min_stock))
+                queryDiffuser = queryDiffuser.where('stock', '>=', parseInt(form.data.min_stock))
             }
 
             if(form.data.max_stock) {
-                queryDiffuser = queryDiffuser.where('cost', '<=', parseInt(form.data.max_stock))
+                queryDiffuser = queryDiffuser.where('stock', '<=', parseInt(form.data.max_stock))
             }
 
             // if(form.data.tags) {
