@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
         'success': async(form) => {
             if (form.data.diffuser_name){
                 queryDiffuser = queryDiffuser
-                    .where('diffuser_name', 'like', '%' + req.query.diffuser_name + '%')
+                    .where('diffuser_name', 'like', '%' + form.data.diffuser_name + '%')
             } 
 
             if (form.data.min_cost) {
@@ -60,15 +60,15 @@ router.get('/', async (req, res) => {
             if(form.data.category_id !== '0') {
                 queryDiffuser = queryDiffuser
                     .query('join', 'diffuser_category', 'category_id', 'diffuser_category.id')
-                    .where('diffuser_category.id', 'like', '%' + req.query.category_id + '%')
+                    .where('diffuser_category.id', 'like', '%' + form.data.category_id + '%')
             }
 
             if(form.data.min_stock) {
-                queryDiffuser = queryDiffuser.where('cost', '>=', form.data.min_cost)
+                queryDiffuser = queryDiffuser.where('cost', '>=', form.data.min_stock)
             }
 
             if(form.data.max_stock) {
-                queryDiffuser = queryDiffuser.where('cost', '<=', form.data.max_cost)
+                queryDiffuser = queryDiffuser.where('cost', '<=', form.data.max_stock)
             }
 
             // if(form.data.tags) {
