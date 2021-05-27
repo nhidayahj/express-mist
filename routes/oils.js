@@ -41,8 +41,12 @@ router.get('/', async (req, res) => {
         'success':async(form) => {
             if(form.data.name) {
                 queryOil = queryOil
-                .where('name', 'like', '%' + req.query.name + '%')
+                .where('name', 'like', '%' + form.data.name + '%')
             }
+            // if(form.data.name) {
+            //     queryOil = queryOil
+            //     .where('name', 'like', '%' + req.query.name + '%')
+            // }
 
             if(form.data.min_cost) {
                 queryOil = queryOil
