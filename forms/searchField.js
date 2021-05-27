@@ -214,22 +214,22 @@ const orderSearchFields = () => {
             },
             validators:[validators.integer()]
         }),
-        'payment_status':fields.string({
-            label:'Payment Status',
-            required:false,
-            errorAfterField:false, 
-            cssClasses: {
-                label:['form-label', 'text-primary'],
-            }
-        }),
-        'order_status':fields.string({
-            label:'Order Status',
-            required:false,
-            errorAfterField:false, 
-            cssClasses: {
-                label:['form-label', 'text-primary'],
-            }
-        })
+        // 'payment_status':fields.string({
+        //     label:'Payment Status',
+        //     required:false,
+        //     errorAfterField:false, 
+        //     cssClasses: {
+        //         label:['form-label', 'text-primary'],
+        //     }
+        // }),
+        // 'order_status':fields.string({
+        //     label:'Order Status',
+        //     required:false,
+        //     errorAfterField:false, 
+        //     cssClasses: {
+        //         label:['form-label', 'text-primary'],
+        //     }
+        // })
     })
 }
 
