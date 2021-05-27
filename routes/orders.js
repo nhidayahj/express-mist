@@ -15,11 +15,14 @@ router.get('/', async (req, res) => {
     let orderOil = await Order_Oil.collection();
     
     let pay_status_table = {
+        '0':'Select Payment Status',
         'unpaid':'Unpaid',
         'paid':'Paid'
     }
     
     let order_status_table = {
+        '0':'Select Order Status',
+        'pending':'Pending',
         'In-Transit': 'In-Transit',
         'Completed':'Completed'
     }
@@ -65,7 +68,7 @@ router.get('/', async (req, res) => {
                 orderOil = orderOil.where('order_id', req.query.order_id);
             }
 
-            if (form.data.payment_status) {
+            if (form.data.payment_status !== '0') {
                 orderDiffuser = orderDiffuser
                     .query('join', 'ship_orders', 'order_id', 'ship_orders.id')
                     .where('ship_orders.payment_status', '=', req.query.payment_status)
@@ -74,7 +77,7 @@ router.get('/', async (req, res) => {
                     .where('ship_orders.payment_status', '=', req.query.payment_status)
             }
 
-            if (form.data.order_status) {
+            if (form.data.order_status !== '0') {
                 orderDiffuser = orderDiffuser
                     .query('join', 'ship_orders', 'order_id', 'ship_orders.id')
                     .where('ship_orders.order_status', '=', req.query.order_status);
