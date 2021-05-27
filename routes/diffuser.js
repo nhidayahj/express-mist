@@ -60,7 +60,7 @@ router.get('/', async (req, res) => {
             if(form.data.category_id !== '0') {
                 queryDiffuser = queryDiffuser
                     .query('join', 'diffuser_category', 'category_id', 'diffuser_category.id')
-                    .where('diffuser_category.id', 'like', '%' + form.data.category_id + '%')
+                    .where('diffuser_category.id', 'like', '%' + parseInt(form.data.category_id) + '%')
             }
 
             if(form.data.min_stock) {
