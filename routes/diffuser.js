@@ -216,7 +216,7 @@ router.get('/:diffuser_id/remove', checkIfAuthenticated, async (req, res) => {
 
 router.post('/:diffuser_id/remove', checkIfAuthenticated, async (req, res) => {
     const diffuserToRemove = await diffuserDataLayer.getDiffuserById(req.params.diffuser_id);
-    let stock = oilToRemove.get("name");
+    let stock = diffuserToRemove.get("name");
     await diffuserToRemove.destroy();
     req.flash("success_messages", `${stock} successfully deleted.`)
     res.redirect('/diffusers')
