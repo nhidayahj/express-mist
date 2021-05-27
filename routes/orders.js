@@ -10,10 +10,21 @@ const { bootstrapField, orderSearchFields } = require('../forms/searchField')
 const { checkIfAuthenticated } = require('../middleware')
 
 router.get('/', async (req, res) => {
-    const orderFormFields = orderSearchFields();
-
+    
     let orderDiffuser = await Order_Diffuser.collection();
     let orderOil = await Order_Oil.collection();
+    
+    let pay_status_table = {
+        '0':'Unpaid',
+        '1':'Paid'
+    }
+    
+    let order_status_table = {
+        '0': 'In-Transit',
+        '1':'Completed'
+    }
+    const orderFormFields = orderSearchFields(pay_status_table, order_status_table);
+    
     orderFormFields.handle(req, {
         'empty': async (form) => {
             let diffuserOrder = await orderDiffuser.fetch({

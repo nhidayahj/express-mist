@@ -203,7 +203,7 @@ const searchFields = () => {
     })
 }
 
-const orderSearchFields = () => {
+const orderSearchFields = (pay_status, order_status) => {
     return forms.create({
         'order_id':fields.string({
             label:'Order ID',
@@ -213,6 +213,26 @@ const orderSearchFields = () => {
                 label:['form-label', 'text-primary'],
             },
             validators:[validators.integer()]
+        }),
+        'payment_status':fields.string({
+            label:'Payment Status',
+            required:false,
+            errorAfterField:false, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }, 
+            widget:widgets.select(pay_status),
+            choices:pay_status
+        }),
+        'order_status':fields.string({
+            label:'Ordeer Status',
+            required:false,
+            errorAfterField:false, 
+            cssClasses: {
+                label:['form-label', 'text-primary'],
+            }, 
+            widget:widgets.select(order_status),
+            choices:order_status
         }),
         // 'payment_status':fields.string({
         //     label:'Payment Status',
