@@ -234,22 +234,6 @@ const orderSearchFields = (pay_status, order_status) => {
             widget:widgets.select(order_status),
             choices:order_status
         }),
-        // 'payment_status':fields.string({
-        //     label:'Payment Status',
-        //     required:false,
-        //     errorAfterField:false, 
-        //     cssClasses: {
-        //         label:['form-label', 'text-primary'],
-        //     }
-        // }),
-        // 'order_status':fields.string({
-        //     label:'Order Status',
-        //     required:false,
-        //     errorAfterField:false, 
-        //     cssClasses: {
-        //         label:['form-label', 'text-primary'],
-        //     }
-        // })
     })
 }
 
