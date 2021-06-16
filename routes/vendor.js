@@ -39,7 +39,7 @@ router.post('/register', async(req,res) => {
             const newVendor = new User(userForm);
             await newVendor.save();
 
-            req.flash("success_message", `New user: ${newVendor.get('email')} successfully added.`)
+            req.flash("success_messages", `New user: ${newVendor.get('email')} successfully added.`)
             res.redirect('/');
         }, 
         'error': (form) => {
